@@ -1,6 +1,6 @@
 #+TITLE: Emacs init file written in org-mode
-#+AUTHOR: Arnaud Legrand
-#+EMAIL: arnaud.legrand@imag.fr
+#+AUTHOR: Julio Toss
+#+EMAIL: julio.toss@imag.fr
 #+STARTUP: indent logdrawer
 #+SETUPFILE: ~/org/org-templates/level-1.org
 #+LANGUAGE: en
@@ -17,7 +17,7 @@
 #+XSLT: 
 
 #+LANGUAGE: en
-#+TAGS: LUKA(L) ARNAUD(A) WEB(W) noexport(n)
+#+TAGS: JULIO(J) WEB(W) noexport(n)
 
 This file is my =.emacs= configuration file (more precisely my
 =~/.emacs.d/init.el= configuration). I stole it from Luka Stanisic who
@@ -35,6 +35,8 @@ To have a nice emacs configuration, you'll need:
 - ess and R
 - texlive and auctex
 If you're a Mac OS X user, [[../blog/2014/05/15/emacs_and_orgmode_on_macosx.org][read this]].
+
+other exaple of configurations: https://carlhu.com/orgmode
 
 * Installation Instructions
 Then copy it into =~/.emacs.d/init.org=. 
@@ -113,9 +115,9 @@ Basicaly it adds the following property in archived trees:
 (require 'package)
 (package-initialize)
 (setq package-archives
-'(("ELPA" . "http://tromey.com/elpa/")
+'( ;("ELPA" . "http://tromey.com/elpa/")
    ("gnu" . "http://elpa.gnu.org/packages/")
-   ("melpa" . "http://melpa.milkbox.net/packages/")
+   ("melpa" . "http://melpa.org/packages/")
    ("marmalade" . "http://marmalade-repo.org/packages/")))
 #+END_SRC
 ** Adding .el files stored in folder elisp:                    :WEB:ARCHIVE:
@@ -234,7 +236,73 @@ Useful if you want to export org files in batch mode...
           (lambda () (y-or-n-p "Do you really want to exit Emacs? "))
           'append)
 #+END_SRC
+** Disable touch-pad on emacs                                        :JULIO:
+[17:58:54; 24.01.2016]
+
+https://www.reddit.com/r/emacs/comments/38o0tr/i_have_to_share_this_switch_your_touchpad_off/
+
+#+begin_src emacs-lisp
+(defun turn-off-mouse (&optional frame)
+  (interactive)
+  (let ((inhibit-message t) (default-directory "~"))
+    (shell-command "synclient TouchpadOff=1")))
+
+(defun turn-on-mouse (&optional frame)
+  (interactive)
+  (let ((inhibit-message t) (default-directory "~"))
+    (shell-command "synclient TouchpadOff=0")))
+
+(add-hook 'focus-in-hook #'turn-off-mouse)
+(add-hook 'focus-out-hook #'turn-on-mouse)
+(add-hook 'delete-frame-functions #'turn-on-mouse)
+#+end_src
+
+#+RESULTS:
+| turn-on-mouse |
+
+** Swap buffers in windows                                          :JULIO:
+<2016-02-09 mar.>
+http://stackoverflow.com/a/1774949
+#+begin_src emacs-lisp
+(defun swap-buffers-in-windows ()
+  "Put the buffer from the selected window in next window, and vice versa"
+  (interactive)
+  (let* ((this (selected-window))
+     (other (next-window))
+     (this-buffer (window-buffer this))
+     (other-buffer (window-buffer other)))
+    (set-window-buffer other this-buffer)
+    (set-window-buffer this other-buffer)
+    )
+  )
+#+end_src
+
+#+RESULTS:
+: swap-buffers-in-windows
+
+Set a shortcut for this function
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x 4 t") 'swap-buffers-in-windows) 
+#+end_src
+
+#+RESULTS:
+: swap-buffers-in-windows
+
+** Evilmode                                                          :JULIO:
+Emulates the Vim commands in emacs
+#+begin_src emacs-lisp
+(require 'evil)
+(evil-mode 1)
+#+end_src
+
+** Save Emacs session on exit                                        :JULIO:
+#+begin_src emacs-lisp
+(desktop-save-mode 1)
+#+end_src
+
 * Shortcuts:
+:PROPERTIES:
+:END:
 ** Load emacs initialization file:                                     :LUKA:
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-c i") 
@@ -357,7 +425,9 @@ for pointing me out that I had forgotten the "require" line... :)
 ;; C-x C-0 restores the default font size
 #+END_SRC
 [11:26:47; 18.04.2014]
-** Add spell checker to the file                                        :WEB:
+** Add spell checker to the file                                       :WEB:
+:PROPERTIES:
+:END:
 #+BEGIN_SRC emacs-lisp
 ;; Inspired from http://tex.stackexchange.com/questions/166681/changing-language-of-flyspell-emacs-with-a-shortcut
 ;; (defun spell (choice)
@@ -455,7 +525,12 @@ don't want is there, but I haven't had any such problems yet.
 (setq org-src-tab-acts-natively t) ;; you want this to have completion in blocks
 (setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
 (setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
+(setq org-startup-indented t)      ;; turn on org-indent-mode for all files
+(setq org-log-into-drawer t)       ;; insert notes into :LOGBOOK: drawer 
+;;(setq org-cycle-include-plain-lists 'integrate) ;; fold plain list when cycling heading visibility
+(setq org-cycle-include-plain-lists (quote integrate))
 #+END_SRC
+
 ** Agenda
 *** Add short cut keys for the org-agenda                            :ARNAUD:
 #+BEGIN_SRC emacs-lisp
@@ -479,10 +554,42 @@ Entered on %U
 #+BEGIN_SRC emacs-lisp
 (setq org-agenda-include-all-todo t)
 (setq org-agenda-include-diary t)
-(setq org-agenda-start-on-weekday nil)  ;;displays the agenda starting today
+;;displays the agenda starting today
+;;(setq org-agenda-start-on-weekday nil)
+;;displays the agenda starting today
+(setq org-agenda-start-on-weekday 1)
+
+(setq org-agenda-skip-scheduled-if-done t)
+
+(setq org-agenda-sorting-strategy (quote 
+((agenda habit-down time-up priority-down category-keep) (todo category-up priority-down) (tags priority-down category-keep) (search category-keep))))
 #+END_SRC
 
-*** TODO Google agenda                                               :ARNAUD:
+**** Default org-agenda-files
+
+#+begin_src emacs-lisp
+(setq org-agenda-files (quote (
+"~/Copy/Doutorado/activity-log.org"
+"~/Copy/julio-personal.org"
+)))
+#+end_src
+
+**** Extra files to add to the agenda
+These files are the org files of the projects that I am currently 
+working on. 
+
+#+begin_src emacs-lisp
+; Adds new file to track on the agenda
+(push "~/Projects/hppsimulations/LabBook.org" org-agenda-files)
+(push "~/Projects/hppsimulations/WORKING_DOC/pma.org" org-agenda-files)
+
+(push "~/Copy/Projects/ParVoronoi-wiki/graphprocessing.org" org-agenda-files)
+#+end_src
+
+*** TODO Google agenda                                     :ARNAUD:ARCHIVE:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 How does he exports its google agenda to org?
 #+BEGIN_SRC emacs-lisp
 (setq org-agenda-files (quote ("~/org/liste.org" "~/org/google.org")))
@@ -497,11 +604,12 @@ How does he exports its google agenda to org?
 (setq org-id-method (quote uuidgen))
 #+END_SRC
 
-** Setting "Wrap at window edge" for .org mode:                        :WEB:
+** Setting "Wrap at window edge" for .org mode:                :WEB:ARCHIVE:
 :PROPERTIES:
+:header-args: :tangle no
 :END:
 #+BEGIN_SRC emacs-lisp
-;; (global-visual-line-mode t)
+ (global-visual-line-mode t)
 #+END_SRC
 
 [16:32:35; 24.04.2013]
@@ -550,10 +658,32 @@ added willy-nilly any time that the statistics cookie is changed.
 
 [16:27:59; 24.04.2013]
 
-** Clocking work 
+** Clocking work                                                     :JULIO:
+Put clock log into a drawer
 #+BEGIN_SRC emacs-lisp
 (setq org-clock-into-drawer t)
 #+END_SRC
+
+** TODO Link to attachment files                                      :JULIO:
+https://lists.gnu.org/archive/html/emacs-orgmode/2008-11/msg00108.html
+
+TO FIX: org-attach-expand-link is only defined after we do =C-c C-a=
+(open the attachment options buffers) . 
+#+BEGIN_SRC emacs-lisp
+(eval-after-load 'ord-attach 
+  (setq org-link-abbrev-alist '(("att" . org-attach-expand-link))))
+#+END_SRC
+
+#+RESULTS:
+
+** Inline tasks                                                      :JULIO:
+#+begin_src emacs-lisp
+(require 'org-inlinetask)
+#+end_src
+** Ditaa                                                  :JULIO:
+#+begin_src emacs-lisp
+(setq org-ditaa-jar-path "/usr/bin/ditaa")
+#+end_src
 * Org-mode shortcuts
 ** Adding date with brackets with command "C-c d":                     :LUKA:
 #+BEGIN_SRC emacs-lisp
@@ -603,7 +733,10 @@ added willy-nilly any time that the statistics cookie is changed.
 #+END_SRC
 [16:36:31; 24.04.2013]
 
-** Adding shortcut for data entry:                                     :LUKA:
+** Adding shortcut for data entry:                            :LUKA:ARCHIVE:
+:PROPERTIES:
+:header-args: :tangle no 
+:END:
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-c e") (lambda ()
                   (interactive)
@@ -636,13 +769,16 @@ C-x n w     (widen)
 ** Navigating through org-sparse-tree                                :JULIO:
 Next and previous occurence on the sparse tree
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x <dead-grave>") 'next-error)
-(global-set-key (kbd "C-x <S-dead-tilde>") 'previous-error)
+;(global-set-key (kbd "C-x <dead-grave>") 'next-error)
+;(global-set-key (kbd "C-x <S-dead-tilde>") 'previous-error)
+
+(global-set-key (kbd "M-n") 'next-error)
+(global-set-key (kbd "M-p") 'previous-error)
 #+END_SRC
+
 * Org-mode + babel:
-** Seamless use of babel (no confirmation, lazy export)     :ARNAUD:ARCHIVE:
+** Seamless use of babel (no confirmation, lazy export)             :ARNAUD:
 :PROPERTIES:
-:header-args: :tangle no
 :END:
 #+BEGIN_SRC emacs-lisp
 (setq org-export-babel-evaluate nil)
@@ -668,6 +804,7 @@ Next and previous occurence on the sparse tree
      (lilypond . t)
      (org . t)
      (makefile . t)
+     (latex . t)
      ))
   (setq org-src-preserve-indentation t)
 #+END_SRC
@@ -691,34 +828,111 @@ To use this type <m and then TAB
 To use this type <r and then TAB
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-structure-template-alist
-        '("r" "#+begin_src R :results output :session :exports both\n\n#+end_src" "<src lang=\"R\">\n\n</src>"))
+        '("r" "#+begin_src R :results output :session :exports both\n?\n#+end_src" "<src lang=\"R\">\n\n</src>"))
 #+END_SRC
+
+#+RESULTS:
+| r | #+begin_src R :results output :session :exports both\n?\n#+end_src      | <src lang="R">\n\n</src>               |
+| P | #+begin_src python :results output :exports both :session\n?\n#+end_src | <src lang="python">\n\n</src>          |
+| p | #+begin_src python :results output :exports both\n?\n#+end_src          | <src lang="python">\n\n</src>          |
+| B | #+begin_src sh :session ? :results output :exports both \n\n#+end_src   | <src lang="sh">\n\n</src>              |
+| b | #+begin_src sh :results output :exports both\n?\n#+end_src              | <src lang="sh">\n\n</src>              |
+| p | #+begin_src python :results output raw :exports both\n\n#+end_src       | <src lang="python">\n\n</src>          |
+| m | #+begin_src emacs-lisp\n\n#+end_src                                     | <src lang="emacs-lisp">\n\n</src>      |
+| S | #+begin_src ?\n\n#+end_src                                              | <src lang="?">\n\n</src>               |
+| s | #+BEGIN_SRC ?\n\n#+END_SRC                                              | <src lang="?">\n\n</src>               |
+| e | #+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE                                       | <example>\n?\n</example>               |
+| q | #+BEGIN_QUOTE\n?\n#+END_QUOTE                                           | <quote>\n?\n</quote>                   |
+| v | #+BEGIN_VERSE\n?\n#+END_VERSE                                           | <verse>\n?\n</verse>                   |
+| V | #+BEGIN_VERBATIM\n?\n#+END_VERBATIM                                     | <verbatim>\n?\n</verbatim>             |
+| c | #+BEGIN_CENTER\n?\n#+END_CENTER                                         | <center>\n?\n</center>                 |
+| l | #+BEGIN_LaTeX\n?\n#+END_LaTeX                                           | <literal style="latex">\n?\n</literal> |
+| L | #+LaTeX:                                                                | <literal style="latex">?</literal>     |
+| h | #+BEGIN_HTML\n?\n#+END_HTML                                             | <literal style="html">\n?\n</literal>  |
+| H | #+HTML:                                                                 | <literal style="html">?</literal>      |
+| a | #+BEGIN_ASCII\n?\n#+END_ASCII                                           |                                        |
+| A | #+ASCII:                                                                |                                        |
+| i | #+INDEX: ?                                                              | #+INDEX: ?                             |
+| I | #+INCLUDE: %file ?                                                      | <include file=%file markup="?">        |
 
 To use this type <R and then TAB
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-structure-template-alist
-        '("R" "#+begin_src R :results output graphics :file (org-babel-temp-file \"figure\" \".png\") :exports both :width 600 :height 400 :session\n\n#+end_src" "<src lang=\"R\">\n\n</src>"))
+        '("R" "#+begin_src R :results output graphics :file (org-babel-temp-file \"figure\" \".png\") :exports both :width 600 :height 400 :session\n?\n#+end_src" "<src lang=\"R\">\n\n</src>"))
 #+END_SRC
+
+#+RESULTS:
+| R | #+begin_src R :results output graphics :file (org-babel-temp-file "figure" ".png") :exports both :width 600 :height 400 :session\n?\n#+end_src | <src lang="R">\n\n</src>               |
+| r | #+begin_src R :results output :session :exports both\n?\n#+end_src                                                                             | <src lang="R">\n\n</src>               |
+| P | #+begin_src python :results output :exports both :session\n?\n#+end_src                                                                        | <src lang="python">\n\n</src>          |
+| p | #+begin_src python :results output :exports both\n?\n#+end_src                                                                                 | <src lang="python">\n\n</src>          |
+| B | #+begin_src sh :session ? :results output :exports both \n\n#+end_src                                                                          | <src lang="sh">\n\n</src>              |
+| b | #+begin_src sh :results output :exports both\n?\n#+end_src                                                                                     | <src lang="sh">\n\n</src>              |
+| p | #+begin_src python :results output raw :exports both\n\n#+end_src                                                                              | <src lang="python">\n\n</src>          |
+| m | #+begin_src emacs-lisp\n\n#+end_src                                                                                                            | <src lang="emacs-lisp">\n\n</src>      |
+| S | #+begin_src ?\n\n#+end_src                                                                                                                     | <src lang="?">\n\n</src>               |
+| s | #+BEGIN_SRC ?\n\n#+END_SRC                                                                                                                     | <src lang="?">\n\n</src>               |
+| e | #+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE                                                                                                              | <example>\n?\n</example>               |
+| q | #+BEGIN_QUOTE\n?\n#+END_QUOTE                                                                                                                  | <quote>\n?\n</quote>                   |
+| v | #+BEGIN_VERSE\n?\n#+END_VERSE                                                                                                                  | <verse>\n?\n</verse>                   |
+| V | #+BEGIN_VERBATIM\n?\n#+END_VERBATIM                                                                                                            | <verbatim>\n?\n</verbatim>             |
+| c | #+BEGIN_CENTER\n?\n#+END_CENTER                                                                                                                | <center>\n?\n</center>                 |
+| l | #+BEGIN_LaTeX\n?\n#+END_LaTeX                                                                                                                  | <literal style="latex">\n?\n</literal> |
+| L | #+LaTeX:                                                                                                                                       | <literal style="latex">?</literal>     |
+| h | #+BEGIN_HTML\n?\n#+END_HTML                                                                                                                    | <literal style="html">\n?\n</literal>  |
+| H | #+HTML:                                                                                                                                        | <literal style="html">?</literal>      |
+| a | #+BEGIN_ASCII\n?\n#+END_ASCII                                                                                                                  |                                        |
+| A | #+ASCII:                                                                                                                                       |                                        |
+| i | #+INDEX: ?                                                                                                                                     | #+INDEX: ?                             |
+| I | #+INCLUDE: %file ?                                                                                                                             | <include file=%file markup="?">        |
 
 *** Python code:
 To use this type <p and then TAB
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-structure-template-alist
-        '("p" "#+begin_src python :results output raw :exports both\n\n#+end_src" "<src lang=\"python\">\n\n</src>"))
+        '("p" "#+begin_src python :results output :exports both\n?\n#+end_src" "<src lang=\"python\">\n\n</src>"))
+
+(add-to-list 'org-structure-template-alist
+        '("P" "#+begin_src python :results output :exports both :session\n?\n#+end_src" "<src lang=\"python\">\n\n</src>"))
 #+END_SRC
+
+#+RESULTS:
+| P | #+begin_src python :results output :exports both :session\n?\n#+end_src | <src lang="python">\n\n</src>          |
+| p | #+begin_src python :results output :exports both\n?\n#+end_src          | <src lang="python">\n\n</src>          |
+| B | #+begin_src sh :session ? :results output :exports both \n\n#+end_src   | <src lang="sh">\n\n</src>              |
+| b | #+begin_src sh :results output :exports both\n?\n#+end_src              | <src lang="sh">\n\n</src>              |
+| p | #+begin_src python :results output raw :exports both\n\n#+end_src       | <src lang="python">\n\n</src>          |
+| m | #+begin_src emacs-lisp\n\n#+end_src                                     | <src lang="emacs-lisp">\n\n</src>      |
+| S | #+begin_src ?\n\n#+end_src                                              | <src lang="?">\n\n</src>               |
+| s | #+BEGIN_SRC ?\n\n#+END_SRC                                              | <src lang="?">\n\n</src>               |
+| e | #+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE                                       | <example>\n?\n</example>               |
+| q | #+BEGIN_QUOTE\n?\n#+END_QUOTE                                           | <quote>\n?\n</quote>                   |
+| v | #+BEGIN_VERSE\n?\n#+END_VERSE                                           | <verse>\n?\n</verse>                   |
+| V | #+BEGIN_VERBATIM\n?\n#+END_VERBATIM                                     | <verbatim>\n?\n</verbatim>             |
+| c | #+BEGIN_CENTER\n?\n#+END_CENTER                                         | <center>\n?\n</center>                 |
+| l | #+BEGIN_LaTeX\n?\n#+END_LaTeX                                           | <literal style="latex">\n?\n</literal> |
+| L | #+LaTeX:                                                                | <literal style="latex">?</literal>     |
+| h | #+BEGIN_HTML\n?\n#+END_HTML                                             | <literal style="html">\n?\n</literal>  |
+| H | #+HTML:                                                                 | <literal style="html">?</literal>      |
+| a | #+BEGIN_ASCII\n?\n#+END_ASCII                                           |                                        |
+| A | #+ASCII:                                                                |                                        |
+| i | #+INDEX: ?                                                              | #+INDEX: ?                             |
+| I | #+INCLUDE: %file ?                                                      | <include file=%file markup="?">        |
+
 *** Bash "sh" code:
 To use this type <b and then TAB
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-structure-template-alist
-        '("b" "#+begin_src sh :results output :exports both\n\n#+end_src" "<src lang=\"sh\">\n\n</src>"))
+        '("b" "#+begin_src sh :results output :exports both\n?\n#+end_src" "<src lang=\"sh\">\n\n</src>"))
 #+END_SRC
 
 To use this type <B and then TAB. This comes with a session argument
 (e.g., in case you want to keep ssh connexions open).
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-structure-template-alist
-        '("B" "#+begin_src sh :session foo :results output :exports both \n\n#+end_src" "<src lang=\"sh\">\n\n</src>"))
+        '("B" "#+begin_src sh :session ? :results output :exports both \n\n#+end_src" "<src lang=\"sh\">\n\n</src>"))
 #+END_SRC
+
 
 [18:23:44; 21.06.2013]
 ** Evaluating whole subtree:                                           :LUKA:
@@ -733,9 +947,52 @@ To use this type <B and then TAB. This comes with a session argument
 (add-hook 'org-mode-hook 'org-display-inline-images)
 (add-hook 'org-mode-hook 'org-babel-result-hide-all)
 #+END_SRC
+** Ipython configuration                                             :JULIO:
+For now I just use this simple configuration explain here:
+http://permalink.gmane.org/gmane.emacs.orgmode/79488
+
+A better solution should do something like this
+https://github.com/gregsexton/ob-ipython
+
+For having ipython sessions.  
+#+begin_src emacs-lisp
+ (setq python-shell-interpreter "ipython"
+        ;; org mode seems to work better with classic mode. . .
+        python-shell-interpreter-args "--classic --no-banner"
+        python-shell-completion-setup-code
+        "from IPython.core.completerlib import module_completion"
+        python-shell-completion-module-string-code
+        "';'.join(module_completion('''%s'''))\n"
+        python-shell-completion-string-code
+        "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+
+#+end_src
+
+For executing wihtout session this is enough
+#+begin_src emacs-lisp
+(setq org-babel-python-command "ipython --no-banner --classic --no-confirm-exit")
+#+end_src
+
 * Org-mode + bibtex
 :PROPERTIES:
 :END:
+** Org-ref configuration
+https://github.com/jkitchin/org-ref
+
+#+begin_src emacs-lisp
+(require 'org-ref)
+(setq reftex-default-bibliography '("~/Copy/Doutorado/papers/library.bib"))
+#+end_src
+
+#+begin_src emacs-lisp
+(setq 
+ ;org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
+ org-ref-default-bibliography '("~/Copy/Doutorado/papers/library.bib")
+ ;org-ref-pdf-directory "~/Dropbox/bibliography/bibtex-pdfs/"
+ )
+
+#+end_src
+
 ** TODO Helm-bibtex configuration                                     :JULIO:
   https://github.com/tmalsburg/helm-bibtex
   - [ ] find a way to automatically load helm-bibtex. Currently for
@@ -746,6 +1003,7 @@ To use this type <B and then TAB. This comes with a session argument
 :PROPERTIES:
 :END:
 
+Set the path to bibtex library.
 #+BEGIN_SRC emacs-lisp
 ;;(require 'helm-bibtex)
 ;; Sets the path to my bibtex file (which is generated by Mendeley) 
@@ -771,7 +1029,7 @@ Doesn't work... I wanted to replace the reftex shortcut
 *** Fix the helm function to find the pdf in field
 :PROPERTIES:
 :END:
-Last two lines where modified to match the syntax of the /file/ field of
+Last two lines were modified to match the syntax of the /file/ field of
 the bibtex generated by Mendeley. 
 
 #+BEGIN_SRC emacs-lisp
@@ -844,18 +1102,23 @@ This is the <f3> shortcut on helm-bibitex.
 #+END_SRC
 
 *** Insert org-mode citation as a new custom link type
-:LOGBOOK:
-CLOCK: [2015-11-26 jeu. 14:29]
-:END:
 :PROPERTIES:
 :END:
 This is the <f3> shortcut on helm-bibitex.
 **** Create a custom link type [[BIB::key]]
 http://orgmode.org/manual/Adding-hyperlink-types.html#Adding-hyperlink-types
 
+Convert a link type BIB:Toss2014 to \cite{Toss2014} on the pdf exporter. 
+https://lists.gnu.org/archive/html/emacs-orgmode/2010-12/msg00629.html
+
 #+BEGIN_SRC emacs-lisp 
 (require 'org)
-(org-add-link-type "BIB" 'org-bib-open) 
+(org-add-link-type "BIB" 'org-bib-open 
+(lambda (path desc format)
+  (cond
+   ((eq format 'latex)
+    (format "\\cite{%s}" path))))) 
+
 ;;(add-hook 'org-store-link-functions 'org-bib-store-link)
 
 ;(require 'helm-bibtex)
@@ -865,6 +1128,7 @@ http://orgmode.org/manual/Adding-hyperlink-types.html#Adding-hyperlink-types
 #+END_SRC
 
 #+RESULTS:
+: org-bib-open
 
 **** Configure helm-bibtex to insert our new kind of link as citation
 
@@ -890,8 +1154,16 @@ http://orgmode.org/manual/Adding-hyperlink-types.html#Adding-hyperlink-types
 
  (add-to-list 'org-latex-classes '("acm-proc-article-sp" "\\documentclass{acm_proc_article-sp}\n \[NO-DEFAULT-PACKAGES]\n \[EXTRA]\n  \\usepackage{graphicx}\n  \\usepackage{hyperref}"  ("\\section{%s}" . "\\section*{%s}") ("\\subsection{%s}" . "\\subsection*{%s}")                       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")                       ("\\paragraph{%s}" . "\\paragraph*{%s}")                       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
- (setq org-latex-to-pdf-process '("pdflatex -interaction nonstopmode -output-directory %o %f ; bibtex `basename %f | sed 's/\.tex//'` ; pdflatex -interaction nonstopmode -output-directory  %o %f ; pdflatex -interaction nonstopmode -output-directory %o %f"))
+(setq org-latex-to-pdf-process '("pdflatex -interaction nonstopmode -output-directory %o %f ; bibtex `basename %f | sed 's/\.tex//'` ; pdflatex -interaction nonstopmode -output-directory  %o %f ; pdflatex -interaction nonstopmode -output-directory %o %f"))
+
+;(setq org-latex-to-pdf-process '("bibtex `basename %f | sed 's/\.tex//'`"))
+
+
 #+END_SRC
+
+#+RESULTS:
+| pdflatex -interaction nonstopmode -output-directory %o %f ; bibtex `basename %f | sed 's/.tex//'` ; pdflatex -interaction nonstopmode -output-directory  %o %f ; pdflatex -interaction nonstopmode -output-directory %o %f |
+
 ** General articles                                                    :LUKA:
 I'm not completely sure I need this. I could probably remove it...
 #+BEGIN_SRC emacs-lisp
@@ -951,10 +1223,7 @@ automatically.
  '(custom-enabled-themes (quote (tango-dark)))
  '(display-buffer-alist nil)
  '(markdown-command "pandoc")
- '(org-agenda-files (quote ("~/Copy/julio-personal.org" "~/Copy/Projects/ParVoronoi-wiki/graphprocessing.org" "~/Copy/Doutorado/activity-log.org")))
- '(org-agenda-skip-scheduled-if-done t)
- '(org-agenda-sorting-strategy (quote ((agenda habit-down time-up priority-down category-keep) (todo category-up priority-down) (tags priority-down category-keep) (search category-keep))))
- '(org-html-postamble-format (quote (("en" "<p class=\"author\">Author: %a (%e)</p>
+'(org-html-postamble-format (quote (("en" "<p class=\"author\">Author: %a (%e)</p>
 <p class=\"date\">Date: %d</p>")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
