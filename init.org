@@ -38,6 +38,8 @@ If you're a Mac OS X user, [[../blog/2014/05/15/emacs_and_orgmode_on_macosx.org]
 
 other exaple of configurations: https://carlhu.com/orgmode
 
+I took the original version of this file at http://mescal.imag.fr/membres/arnaud.legrand/misc/init.php
+
 * Installation Instructions
 Then copy it into =~/.emacs.d/init.org=. 
 
@@ -508,8 +510,10 @@ don't want is there, but I haven't had any such problems yet.
 #+END_SRC
 [16:27:20; 24.04.2013]
 ** Fix problem of using dead-keys                                    :JULIO:
+:PROPERTIES:
+:END:
 #+begin_src emacs-lisp
- (require 'iso-transl)
+  (require 'iso-transl)
 #+end_src
 
 * Org-mode convenient configuration
@@ -1148,12 +1152,23 @@ https://lists.gnu.org/archive/html/emacs-orgmode/2010-12/msg00629.html
 #+END_SRC
 
 * Org-mode LaTeX export
-** ACM                                                               :ARNAUD:
+:PROPERTIES:
+:END:
+** Clear default values                                      :JULIO:ARCHIVE:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
+To remove the default headers added on the latex export.
+#+begin_src emacs-lisp
+(unless (boundp 'org-latex-classes) (setq org-latex-classes nil))
+#+end_src
+
+** ACM                                                              :ARNAUD:
 #+BEGIN_SRC emacs-lisp
- (unless (boundp 'org-latex-classes) (setq org-latex-classes nil))
+ ;; Clear the default values for this class
+ ;; (unless (boundp 'org-latex-classes) (setq org-latex-classes nil))
 
  (add-to-list 'org-latex-classes '("acm-proc-article-sp" "\\documentclass{acm_proc_article-sp}\n \[NO-DEFAULT-PACKAGES]\n \[EXTRA]\n  \\usepackage{graphicx}\n  \\usepackage{hyperref}"  ("\\section{%s}" . "\\section*{%s}") ("\\subsection{%s}" . "\\subsection*{%s}")                       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")                       ("\\paragraph{%s}" . "\\paragraph*{%s}")                       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
 (setq org-latex-to-pdf-process '("pdflatex -interaction nonstopmode -output-directory %o %f ; bibtex `basename %f | sed 's/\.tex//'` ; pdflatex -interaction nonstopmode -output-directory  %o %f ; pdflatex -interaction nonstopmode -output-directory %o %f"))
 
 ;(setq org-latex-to-pdf-process '("bibtex `basename %f | sed 's/\.tex//'`"))
@@ -1164,7 +1179,14 @@ https://lists.gnu.org/archive/html/emacs-orgmode/2010-12/msg00629.html
 #+RESULTS:
 | pdflatex -interaction nonstopmode -output-directory %o %f ; bibtex `basename %f | sed 's/.tex//'` ; pdflatex -interaction nonstopmode -output-directory  %o %f ; pdflatex -interaction nonstopmode -output-directory %o %f |
 
-** General articles                                                    :LUKA:
+*** General articles                                         :LUKA:ARCHIVE:
+:LOGBOOK:  
+- Note taken on [2016-03-14 lun. 12:49] \\
+  let the emacs defaults for article class
+:END:      
+:PROPERTIES:
+:header-args: :tangle no
+:END:      
 I'm not completely sure I need this. I could probably remove it...
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-latex-classes '("article" "\\documentclass{article}\n \[NO-DEFAULT-PACKAGES]\n \[EXTRA]\n  \\usepackage{graphicx}\n  \\usepackage{hyperref}"  ("\\section{%s}" . "\\section*{%s}") ("\\subsection{%s}" . "\\subsection*{%s}")                       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")                       ("\\paragraph{%s}" . "\\paragraph*{%s}")                       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
