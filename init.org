@@ -1014,6 +1014,11 @@ For executing wihtout session this is enough
 #+begin_src emacs-lisp
 (setq org-babel-python-command "ipython --no-banner --classic --no-confirm-exit")
 #+end_src
+** Noweb evaluation                                                  :JULIO:
+use fast name resolution of noweb reference .  
+#+begin_src emacs-lisp
+(setq org-babel-use-quick-and-dirty-noweb-expansion t)
+#+end_src
 
 * Org-mode + bibtex
 :PROPERTIES:
