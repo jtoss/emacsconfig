@@ -186,9 +186,12 @@ Useful if you want to export org files in batch mode...
 (setq inhibit-splash-screen t)
 #+END_SRC
 [16:29:14; 24.04.2013]
-** Keep the list of recent files                                     :JULIO:
+** Keep the list of recent files                                      :JULIO:
+Bug with tramp and recent files:
+https://www.emacswiki.org/emacs/RecentFiles#toc9
 #+BEGIN_SRC emacs-lisp
 (require 'recentf)
+(setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
@@ -1273,7 +1276,7 @@ All you need to do is add the following lines to your .emacs file,
 
 #+BEGIN_SRC emacs-lisp
 (require 'tramp)
-(setq tramp-default-method "scp")
+(setq tramp-default-method "ssh")
 #+END_SRC
 
 Then in order to open a file on a remote machine, you can use,
