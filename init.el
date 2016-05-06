@@ -45,27 +45,27 @@
 (setq auto-mode-alist
    (append (mapcar 'purecopy
       '(("\\.c$"   . c-mode)
-        ("\\.h$"   . c-mode)
-        ("\\.c.simp$" . c-mode)
-        ("\\.h.simp$" . c-mode)
-        ("\\.a$"   . c-mode)
-        ("\\.w$"   . cweb-mode)
-        ("\\.cc$"   . c++-mode)
-        ("\\.S$"   . asm-mode)
-        ("\\.s$"   . asm-mode)
-        ("\\.p$"   . pascal-mode)
-        ("\\.Rmd$" . poly-markdown-mode)
-        ("\\.pas$" . pascal-mode)
-        ("\\.tex$" . LaTeX-mode)
-        ("\\.txi$" . Texinfo-mode)
-        ("\\.el$"  . emacs-lisp-mode)
-;;      ("emacs"  . emacs-lisp-mode)
-        ("\\.ml[iylp]?" . tuareg-mode)
-        ("[mM]akefile" . makefile-mode)
-        ("[mM]akefile.*" . makefile-mode)
-        ("\\.mak" . makefile-mode)
-        ("\\.cshrc" . sh-mode)
-        ("\\.html$" . html-mode)
+	("\\.h$"   . c-mode)
+	("\\.c.simp$" . c-mode)
+	("\\.h.simp$" . c-mode)
+	("\\.a$"   . c-mode)
+	("\\.w$"   . cweb-mode)
+	("\\.cc$"   . c++-mode)
+	("\\.S$"   . asm-mode)
+	("\\.s$"   . asm-mode)
+	("\\.p$"   . pascal-mode)
+	("\\.Rmd$" . poly-markdown-mode)
+	("\\.pas$" . pascal-mode)
+	("\\.tex$" . LaTeX-mode)
+	("\\.txi$" . Texinfo-mode)
+	("\\.el$"  . emacs-lisp-mode)
+;;	("emacs"  . emacs-lisp-mode)
+	("\\.ml[iylp]?" . tuareg-mode)
+	("[mM]akefile" . makefile-mode)
+	("[mM]akefile.*" . makefile-mode)
+	("\\.mak" . makefile-mode)
+	("\\.cshrc" . sh-mode)
+	("\\.html$" . html-mode)
         ("\\.org$" . org-mode)
         ("\\.md$" . markdown-mode)
 )) auto-mode-alist))
@@ -81,10 +81,10 @@
   '("Emacs - " (buffer-file-name "%f"
     (dired-directory dired-directory "%b"))))
 
-(global-font-lock-mode t)
-(custom-set-faces
-  '(flyspell-incorrect ((t (:inverse-video t)))))
-;;  (set-face-attribute 'flyspell-incorrect (t (:inverse-video t)))
+  (global-font-lock-mode t)
+  (custom-set-faces
+    '(flyspell-incorrect ((t (:inverse-video t)))))
+  ;;  (set-face-attribute 'flyspell-incorrect (t (:inverse-video t)))
 
 (line-number-mode 1)
 (column-number-mode 1)
@@ -98,20 +98,6 @@
           (lambda () (y-or-n-p "Do you really want to exit Emacs? "))
           'append)
 
-(defun turn-off-mouse (&optional frame)
-  (interactive)
-  (let ((inhibit-message t) (default-directory "~"))
-    (shell-command "synclient TouchpadOff=1")))
-
-(defun turn-on-mouse (&optional frame)
-  (interactive)
-  (let ((inhibit-message t) (default-directory "~"))
-    (shell-command "synclient TouchpadOff=0")))
-
-(add-hook 'focus-in-hook #'turn-off-mouse)
-(add-hook 'focus-out-hook #'turn-on-mouse)
-(add-hook 'delete-frame-functions #'turn-on-mouse)
-
 (defun swap-buffers-in-windows ()
   "Put the buffer from the selected window in next window, and vice versa"
   (interactive)
@@ -124,8 +110,9 @@
     )
   )
 
-(global-set-key (kbd "C-x 4 t") 'swap-buffers-in-windows)
+(global-set-key (kbd "C-x 4 t") 'swap-buffers-in-windows) 
 
+(setq evil-want-C-i-jump nil)
 (require 'evil)
 (evil-mode 1)
 
@@ -167,7 +154,7 @@
 (global-set-key "\^c\^b" 'beginning-of-defun-and-mark)
 (global-set-key "\^c\^e" 'end-of-defun-and-mark)
 (global-set-key "\^c\^j" 'jump-mark)
-(global-set-key [S-f6] 'jump-mark)              ;; jump from mark to mark
+(global-set-key [S-f6] 'jump-mark)		;; jump from mark to mark
 
 (global-set-key "\M-g" 'goto-line)
 
@@ -218,12 +205,12 @@
 (add-hook 'tex-mode-hook 'auto-fill-mode-on)
 (add-hook 'latex-mode-hook 'auto-fill-mode-on)
 
-(setq c-default-style "k&r")
-(setq c-basic-offset 2)
+  (setq c-default-style "k&r")
+  (setq c-basic-offset 2)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(require 'iso-transl)
+  (require 'iso-transl)
 
 (setq org-directory "~/org/")
 
@@ -354,28 +341,28 @@ Entered on %U
 (setq org-export-babel-evaluate nil)
 (setq org-confirm-babel-evaluate nil)
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '(
-   (C . t)
-   (sh . t)
-   (python . t)
-   (R . t)
-   (ruby . t)
-   (ocaml . t)
-   (ditaa . t)
-   (dot . t)
-   (octave . t)
-   (sqlite . t)
-   (perl . t)
-   (screen . t)
-   (plantuml . t)
-   (lilypond . t)
-   (org . t)
-   (makefile . t)
-   (latex . t)
-   ))
-(setq org-src-preserve-indentation t)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '(
+     (C . t)
+     (sh . t)
+     (python . t)
+     (R . t)
+     (ruby . t)
+     (ocaml . t)
+     (ditaa . t)
+     (dot . t)
+     (octave . t)
+     (sqlite . t)
+     (perl . t)
+     (screen . t)
+     (plantuml . t)
+     (lilypond . t)
+     (org . t)
+     (makefile . t)
+     (latex . t)
+     ))
+  (setq org-src-preserve-indentation t)
 
 (add-to-list 'org-structure-template-alist
         '("S" "#+begin_src ?\n\n#+end_src" "<src lang=\"?\">\n\n</src>"))
@@ -413,69 +400,47 @@ Entered on %U
 (add-hook 'org-mode-hook 'org-display-inline-images)
 (add-hook 'org-mode-hook 'org-babel-result-hide-all)
 
-(setq python-shell-interpreter "ipython"
-       ;; org mode seems to work better with classic mode. . .
-       python-shell-interpreter-args "--classic --no-banner"
-       python-shell-completion-setup-code
-       "from IPython.core.completerlib import module_completion"
-       python-shell-completion-module-string-code
-       "';'.join(module_completion('''%s'''))\n"
-       python-shell-completion-string-code
-       "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+ (setq python-shell-interpreter "ipython"
+        ;; org mode seems to work better with classic mode. . .
+        python-shell-interpreter-args "--classic --no-banner"
+        python-shell-completion-setup-code
+        "from IPython.core.completerlib import module_completion"
+        python-shell-completion-module-string-code
+        "';'.join(module_completion('''%s'''))\n"
+        python-shell-completion-string-code
+        "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
 
 (setq org-babel-python-command "ipython --no-banner --classic --no-confirm-exit")
 
 (setq org-babel-use-quick-and-dirty-noweb-expansion t)
 
 (require 'org-ref)
-(setq reftex-default-bibliography '("~/Copy/Doutorado/papers/library.bib"))
+(setq reftex-default-bibliography '("~/Documents/Mendeley/library.bib"))
 
 (setq 
  ;org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
- org-ref-default-bibliography '("~/Copy/Doutorado/papers/library.bib")
+ org-ref-default-bibliography '("~/Documents/Mendeley/library.bib")
  ;org-ref-pdf-directory "~/Dropbox/bibliography/bibtex-pdfs/"
  )
 
-;;(require 'helm-bibtex)
 ;; Sets the path to my bibtex file (which is generated by Mendeley) 
-(setq helm-bibtex-bibliography '("~/Copy/Doutorado/papers/library.bib"))
+(setq bibtex-completion-bibliography '("~/Documents/Mendeley/library.bib"))
 
 ;; Configure the field on the bibtex that contains the path to the pdf file.
-(setq helm-bibtex-pdf-field "file")
+(setq bibtex-completion-pdf-field "file")
 
-(eval-after-load "helm-bibtex" 
-'(defun helm-bibtex-find-pdf-in-field (key-or-entry)
-    "Returns the path of the PDF specified in the field
-`helm-bibtex-pdf-field' if that file exists.  Returns nil if no
-file is specified, or if the specified file does not exist, or if
-`helm-bibtex-pdf-field' is nil."
-
-    (when helm-bibtex-pdf-field
-      (let* ((entry (if (stringp key-or-entry)
-                        (helm-bibtex-get-entry1 key-or-entry t)
-                      key-or-entry))
-             (value (helm-bibtex-get-value helm-bibtex-pdf-field entry)))
-        (cond
-         ((not value) nil)         ; Field not defined.
-         ((f-file? value) value)   ; A bare path was found.
-         (t                             ; Assuming Zotero/Mendeley/JabRef format:
-          (cl-loop  ; Looping over the files:
-           for record in (s-split ";" value)
-           for record = (s-split ":" record)
-           for file-name = (nth 0 record)
-           for path = (nth 1 record)
-           if (f-file? path)
-           collect (f-full path)
-           else if (f-file? (f-full (f-join path file-name)))
-           collect (f-full (f-join path file-name))
-           ;; This is to work around a bug in Mendeley.
-           else if (f-file? (concat "/" path))
-           collect ( concat "/" path))))))))
+;;Search bibtex
+;;(global-set-key (kbd "C-c C-x [") 'helm-bibtex)
 
 ;;(require 'helm-bibtex)
-(setq helm-bibtex-pdf-open-function
+;;(setq helm-bibtex-pdf-open-function
+;;      (lambda (fpath)
+;;	(start-process "mendeleydesktop" "*helm-bibtex-mendeleydesktop*" "/usr/bin/mendeleydesktop" fpath)))
+
+;;(require 'helm-bibtex)
+(setq bibtex-completion-pdf-open-function
       (lambda (fpath)
-        (start-process "mendeleydesktop" "*helm-bibtex-mendeleydesktop*" "/usr/bin/mendeleydesktop" fpath)))
+	(call-process "mendeleydesktop" nil 0 nil fpath)))
 
 (require 'org)
 (org-add-link-type "BIB" 'org-bib-open 
@@ -486,23 +451,22 @@ file is specified, or if the specified file does not exist, or if
 
 ;;(add-hook 'org-store-link-functions 'org-bib-store-link)
 
-;(require 'helm-bibtex)
 (defun org-bib-open (path)
   "Uses the helm functions to look up the path on the bibtex."
-  (funcall helm-bibtex-pdf-open-function (nth 0 (helm-bibtex-find-pdf-in-field path ))))
+  (funcall bibtex-completion-pdf-open-function (nth 0 (bibtex-completion-find-pdf-in-field path ))))
 
-(defun helm-bibtex-format-citation-BIB (keys)
+(defun bibtex-completion-format-citation-BIB (keys)
   "Formatter for BIB references."
   (s-join ", "
           (--map (format "BIB:%s" it) keys)))
 
-(setq helm-bibtex-format-citation-functions
-      '((org-mode      . helm-bibtex-format-citation-BIB)
-              (latex-mode    . helm-bibtex-format-citation-cite)
-              (markdown-mode . helm-bibtex-format-citation-pandoc-citeproc)
-              (default       . helm-bibtex-format-citation-default)))
+(setq bibtex-completion-format-citation-functions
+      '((org-mode      . bibtex-completion-format-citation-BIB)
+	      (latex-mode    . bibtex-completion-format-citation-cite)
+	      (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+	      (default       . bibtex-completion-format-citation-default)))
 
-;; Clear the default values for this class
+ ;; Clear the default values for this class
  ;; (unless (boundp 'org-latex-classes) (setq org-latex-classes nil))
 
  (add-to-list 'org-latex-classes '("acm-proc-article-sp" "\\documentclass{acm_proc_article-sp}\n \[NO-DEFAULT-PACKAGES]\n \[EXTRA]\n  \\usepackage{graphicx}\n  \\usepackage{hyperref}"  ("\\section{%s}" . "\\section*{%s}") ("\\subsection{%s}" . "\\subsection*{%s}")                       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")                       ("\\paragraph{%s}" . "\\paragraph*{%s}")                       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
