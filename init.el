@@ -383,6 +383,12 @@ Entered on %U
         '("P" "#+begin_src python :results output :exports both :session\n?\n#+end_src" "<src lang=\"python\">\n\n</src>"))
 
 (add-to-list 'org-structure-template-alist
+        '("ip" "#+begin_src ipython :results output :exports both :session\n?\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
+
+(add-to-list 'org-structure-template-alist
+        '("IP" "#+begin_src ipython :results output :exports both :session\n?\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
+
+(add-to-list 'org-structure-template-alist
         '("b" "#+begin_src sh :results output :exports both\n?\n#+end_src" "<src lang=\"sh\">\n\n</src>"))
 
 (add-to-list 'org-structure-template-alist
@@ -400,17 +406,11 @@ Entered on %U
 (add-hook 'org-mode-hook 'org-display-inline-images)
 (add-hook 'org-mode-hook 'org-babel-result-hide-all)
 
- (setq python-shell-interpreter "ipython"
-        ;; org mode seems to work better with classic mode. . .
-        python-shell-interpreter-args "--classic --no-banner"
-        python-shell-completion-setup-code
-        "from IPython.core.completerlib import module_completion"
-        python-shell-completion-module-string-code
-        "';'.join(module_completion('''%s'''))\n"
-        python-shell-completion-string-code
-        "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+(setq python-shell-interpreter "python3")
 
-(setq org-babel-python-command "ipython --no-banner --classic --no-confirm-exit")
+(setq org-babel-python-command "python3")
+
+(require 'ob-ipython)
 
 (setq org-babel-use-quick-and-dirty-noweb-expansion t)
 

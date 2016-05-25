@@ -867,60 +867,11 @@ To use this type <r and then TAB
         '("r" "#+begin_src R :results output :session :exports both\n?\n#+end_src" "<src lang=\"R\">\n\n</src>"))
 #+END_SRC
 
-#+RESULTS:
-| r | #+begin_src R :results output :session :exports both\n?\n#+end_src      | <src lang="R">\n\n</src>               |
-| P | #+begin_src python :results output :exports both :session\n?\n#+end_src | <src lang="python">\n\n</src>          |
-| p | #+begin_src python :results output :exports both\n?\n#+end_src          | <src lang="python">\n\n</src>          |
-| B | #+begin_src sh :session ? :results output :exports both \n\n#+end_src   | <src lang="sh">\n\n</src>              |
-| b | #+begin_src sh :results output :exports both\n?\n#+end_src              | <src lang="sh">\n\n</src>              |
-| p | #+begin_src python :results output raw :exports both\n\n#+end_src       | <src lang="python">\n\n</src>          |
-| m | #+begin_src emacs-lisp\n\n#+end_src                                     | <src lang="emacs-lisp">\n\n</src>      |
-| S | #+begin_src ?\n\n#+end_src                                              | <src lang="?">\n\n</src>               |
-| s | #+BEGIN_SRC ?\n\n#+END_SRC                                              | <src lang="?">\n\n</src>               |
-| e | #+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE                                       | <example>\n?\n</example>               |
-| q | #+BEGIN_QUOTE\n?\n#+END_QUOTE                                           | <quote>\n?\n</quote>                   |
-| v | #+BEGIN_VERSE\n?\n#+END_VERSE                                           | <verse>\n?\n</verse>                   |
-| V | #+BEGIN_VERBATIM\n?\n#+END_VERBATIM                                     | <verbatim>\n?\n</verbatim>             |
-| c | #+BEGIN_CENTER\n?\n#+END_CENTER                                         | <center>\n?\n</center>                 |
-| l | #+BEGIN_LaTeX\n?\n#+END_LaTeX                                           | <literal style="latex">\n?\n</literal> |
-| L | #+LaTeX:                                                                | <literal style="latex">?</literal>     |
-| h | #+BEGIN_HTML\n?\n#+END_HTML                                             | <literal style="html">\n?\n</literal>  |
-| H | #+HTML:                                                                 | <literal style="html">?</literal>      |
-| a | #+BEGIN_ASCII\n?\n#+END_ASCII                                           |                                        |
-| A | #+ASCII:                                                                |                                        |
-| i | #+INDEX: ?                                                              | #+INDEX: ?                             |
-| I | #+INCLUDE: %file ?                                                      | <include file=%file markup="?">        |
-
 To use this type <R and then TAB
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-structure-template-alist
         '("R" "#+begin_src R :results output graphics :file (org-babel-temp-file \"figure\" \".png\") :exports both :width 600 :height 400 :session\n?\n#+end_src" "<src lang=\"R\">\n\n</src>"))
 #+END_SRC
-
-#+RESULTS:
-| R | #+begin_src R :results output graphics :file (org-babel-temp-file "figure" ".png") :exports both :width 600 :height 400 :session\n?\n#+end_src | <src lang="R">\n\n</src>               |
-| r | #+begin_src R :results output :session :exports both\n?\n#+end_src                                                                             | <src lang="R">\n\n</src>               |
-| P | #+begin_src python :results output :exports both :session\n?\n#+end_src                                                                        | <src lang="python">\n\n</src>          |
-| p | #+begin_src python :results output :exports both\n?\n#+end_src                                                                                 | <src lang="python">\n\n</src>          |
-| B | #+begin_src sh :session ? :results output :exports both \n\n#+end_src                                                                          | <src lang="sh">\n\n</src>              |
-| b | #+begin_src sh :results output :exports both\n?\n#+end_src                                                                                     | <src lang="sh">\n\n</src>              |
-| p | #+begin_src python :results output raw :exports both\n\n#+end_src                                                                              | <src lang="python">\n\n</src>          |
-| m | #+begin_src emacs-lisp\n\n#+end_src                                                                                                            | <src lang="emacs-lisp">\n\n</src>      |
-| S | #+begin_src ?\n\n#+end_src                                                                                                                     | <src lang="?">\n\n</src>               |
-| s | #+BEGIN_SRC ?\n\n#+END_SRC                                                                                                                     | <src lang="?">\n\n</src>               |
-| e | #+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE                                                                                                              | <example>\n?\n</example>               |
-| q | #+BEGIN_QUOTE\n?\n#+END_QUOTE                                                                                                                  | <quote>\n?\n</quote>                   |
-| v | #+BEGIN_VERSE\n?\n#+END_VERSE                                                                                                                  | <verse>\n?\n</verse>                   |
-| V | #+BEGIN_VERBATIM\n?\n#+END_VERBATIM                                                                                                            | <verbatim>\n?\n</verbatim>             |
-| c | #+BEGIN_CENTER\n?\n#+END_CENTER                                                                                                                | <center>\n?\n</center>                 |
-| l | #+BEGIN_LaTeX\n?\n#+END_LaTeX                                                                                                                  | <literal style="latex">\n?\n</literal> |
-| L | #+LaTeX:                                                                                                                                       | <literal style="latex">?</literal>     |
-| h | #+BEGIN_HTML\n?\n#+END_HTML                                                                                                                    | <literal style="html">\n?\n</literal>  |
-| H | #+HTML:                                                                                                                                        | <literal style="html">?</literal>      |
-| a | #+BEGIN_ASCII\n?\n#+END_ASCII                                                                                                                  |                                        |
-| A | #+ASCII:                                                                                                                                       |                                        |
-| i | #+INDEX: ?                                                                                                                                     | #+INDEX: ?                             |
-| I | #+INCLUDE: %file ?                                                                                                                             | <include file=%file markup="?">        |
 
 *** Python code:
 To use this type <p and then TAB
@@ -932,28 +883,15 @@ To use this type <p and then TAB
         '("P" "#+begin_src python :results output :exports both :session\n?\n#+end_src" "<src lang=\"python\">\n\n</src>"))
 #+END_SRC
 
-#+RESULTS:
-| P | #+begin_src python :results output :exports both :session\n?\n#+end_src | <src lang="python">\n\n</src>          |
-| p | #+begin_src python :results output :exports both\n?\n#+end_src          | <src lang="python">\n\n</src>          |
-| B | #+begin_src sh :session ? :results output :exports both \n\n#+end_src   | <src lang="sh">\n\n</src>              |
-| b | #+begin_src sh :results output :exports both\n?\n#+end_src              | <src lang="sh">\n\n</src>              |
-| p | #+begin_src python :results output raw :exports both\n\n#+end_src       | <src lang="python">\n\n</src>          |
-| m | #+begin_src emacs-lisp\n\n#+end_src                                     | <src lang="emacs-lisp">\n\n</src>      |
-| S | #+begin_src ?\n\n#+end_src                                              | <src lang="?">\n\n</src>               |
-| s | #+BEGIN_SRC ?\n\n#+END_SRC                                              | <src lang="?">\n\n</src>               |
-| e | #+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE                                       | <example>\n?\n</example>               |
-| q | #+BEGIN_QUOTE\n?\n#+END_QUOTE                                           | <quote>\n?\n</quote>                   |
-| v | #+BEGIN_VERSE\n?\n#+END_VERSE                                           | <verse>\n?\n</verse>                   |
-| V | #+BEGIN_VERBATIM\n?\n#+END_VERBATIM                                     | <verbatim>\n?\n</verbatim>             |
-| c | #+BEGIN_CENTER\n?\n#+END_CENTER                                         | <center>\n?\n</center>                 |
-| l | #+BEGIN_LaTeX\n?\n#+END_LaTeX                                           | <literal style="latex">\n?\n</literal> |
-| L | #+LaTeX:                                                                | <literal style="latex">?</literal>     |
-| h | #+BEGIN_HTML\n?\n#+END_HTML                                             | <literal style="html">\n?\n</literal>  |
-| H | #+HTML:                                                                 | <literal style="html">?</literal>      |
-| a | #+BEGIN_ASCII\n?\n#+END_ASCII                                           |                                        |
-| A | #+ASCII:                                                                |                                        |
-| i | #+INDEX: ?                                                              | #+INDEX: ?                             |
-| I | #+INCLUDE: %file ?                                                      | <include file=%file markup="?">        |
+https://github.com/gregsexton/ob-ipython#tips-and-tricks
+Ipython must have a :session argument
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'org-structure-template-alist
+        '("ip" "#+begin_src ipython :results output :exports both :session\n?\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
+
+(add-to-list 'org-structure-template-alist
+        '("IP" "#+begin_src ipython :results output :exports both :session\n?\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
+#+END_SRC
 
 *** Bash "sh" code:
 To use this type <b and then TAB
@@ -998,7 +936,10 @@ C
 (add-hook 'org-mode-hook 'org-display-inline-images)
 (add-hook 'org-mode-hook 'org-babel-result-hide-all)
 #+END_SRC
-** Ipython configuration                                             :JULIO:
+** TODO Ipython configuration                                         :JULIO:
+*** Use python3
+:PROPERTIES:
+:END:
 For now I just use this simple configuration explain here:
 http://permalink.gmane.org/gmane.emacs.orgmode/79488
 
@@ -1007,7 +948,27 @@ https://github.com/gregsexton/ob-ipython
 
 For having ipython sessions.  
 #+begin_src emacs-lisp
- (setq python-shell-interpreter "ipython"
+(setq python-shell-interpreter "python3")
+#+end_src
+
+For executing wihtout session this is enough
+#+begin_src emacs-lisp
+(setq org-babel-python-command "python3")
+#+end_src
+
+*** Old Ipython configuration                                     :ARCHIVE:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
+For now I just use this simple configuration explain here:
+http://permalink.gmane.org/gmane.emacs.orgmode/79488
+
+A better solution should do something like this
+https://github.com/gregsexton/ob-ipython
+
+For having ipython sessions.  
+#+begin_src emacs-lisp
+ (setq python-shell-interpreter "python3"
         ;; org mode seems to work better with classic mode. . .
         python-shell-interpreter-args "--classic --no-banner"
         python-shell-completion-setup-code
@@ -1021,8 +982,17 @@ For having ipython sessions.
 
 For executing wihtout session this is enough
 #+begin_src emacs-lisp
-(setq org-babel-python-command "ipython --no-banner --classic --no-confirm-exit")
+(setq org-babel-python-command "python3 --no-banner --classic --no-confirm-exit")
 #+end_src
+
+*** Ipython Babel evaluation
+
+https://github.com/gregsexton/ob-ipython
+
+#+begin_src emacs-lisp
+(require 'ob-ipython)
+#+end_src
+
 ** Noweb evaluation                                                  :JULIO:
 use fast name resolution of noweb reference .  
 #+begin_src emacs-lisp
