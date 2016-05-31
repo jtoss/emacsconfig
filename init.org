@@ -940,13 +940,8 @@ C
 *** Use python3
 :PROPERTIES:
 :END:
-For now I just use this simple configuration explain here:
-http://permalink.gmane.org/gmane.emacs.orgmode/79488
 
-A better solution should do something like this
-https://github.com/gregsexton/ob-ipython
-
-For having ipython sessions.  
+for having python3 sessions.  
 #+begin_src emacs-lisp
 (setq python-shell-interpreter "python3")
 #+end_src
@@ -992,6 +987,13 @@ https://github.com/gregsexton/ob-ipython
 #+begin_src emacs-lisp
 (require 'ob-ipython)
 #+end_src
+
+Solve bug "Searching for program: no such file or directory, ipython"
+https://github.com/gregsexton/ob-ipython/issues/52
+#+begin_src emacs-lisp
+(setq exec-path (append '("/home/julio/anaconda3/bin") exec-path))
+#+end_src
+
 
 ** Noweb evaluation                                                  :JULIO:
 use fast name resolution of noweb reference .  

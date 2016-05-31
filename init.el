@@ -412,6 +412,8 @@ Entered on %U
 
 (require 'ob-ipython)
 
+(setq exec-path (append '("/home/julio/anaconda3/bin") exec-path))
+
 (setq org-babel-use-quick-and-dirty-noweb-expansion t)
 
 (require 'org-ref)
