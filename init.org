@@ -890,10 +890,10 @@ https://github.com/gregsexton/ob-ipython#tips-and-tricks
 Ipython must have a :session argument
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-structure-template-alist
-        '("ip" "#+begin_src ipython :results output :exports both :session\n?\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
+        '("ip" "#+begin_src ipython :exports both :session\n?\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
 
 (add-to-list 'org-structure-template-alist
-        '("IP" "#+begin_src ipython :results output :exports both :session\n?\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
+        '("IP" "#+begin_src ipython :exports both :session ?\n\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
 #+END_SRC
 
 *** Bash "sh" code:
