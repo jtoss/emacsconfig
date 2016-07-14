@@ -586,7 +586,7 @@ Entered on %U
 #+begin_src emacs-lisp
 (setq org-agenda-files (quote (
 "~/Copy/Doutorado/activity-log.org"
-"~/Copy/julio-personal.org"
+"~/org/julio-personal.org"
 )))
 #+end_src
 
@@ -730,6 +730,9 @@ TO FIX: org-attach-expand-link is only defined after we do =C-c C-a=
       (insert (format-time-string format))))
 #+END_SRC
 [16:34:15; 24.04.2013]
+
+** TODO about creating IDs in orgfiles
+http://stackoverflow.com/questions/27132422/reference-unique-id-across-emacs-org-mode-files
 
 ** Fix view TODO tree:                                        :LUKA:ARCHIVE:
 :PROPERTIES:
