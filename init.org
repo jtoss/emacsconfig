@@ -726,7 +726,7 @@ TO FIX: org-attach-expand-link is only defined after we do =C-c C-a=
     (interactive "P")
     (let ((format (cond
                    ((not prefix) "[%H:%M:%S; %d.%m.%Y]")
-                   ((equal prefix '(4)) "[%H:%M:%S; %Y-%m-%d]"))))
+                   ((equal prefix '(4)) "%H%M%S%Y%m%d"))))
       (insert (format-time-string format))))
 #+END_SRC
 [16:34:15; 24.04.2013]
