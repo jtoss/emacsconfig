@@ -203,13 +203,17 @@ https://www.emacswiki.org/emacs/RecentFiles#toc9
     (dired-directory dired-directory "%b"))))
 #+END_SRC
 [16:29:40; 24.04.2013]
-** Font size                                                :ARNAUD:ARCHIVE:
+** Font size                                                        :ARNAUD:
 :PROPERTIES:
-:header-args: :tangle no
 :END:
+
 #+BEGIN_SRC emacs-lisp
-(set-default-font "9x15")
+; (set-default-font "9x15")
+(set-face-attribute 'default nil :height 115)
 #+END_SRC
+
+#+RESULTS:
+
 ** Text coloring                                                    :ARNAUD:
 #+BEGIN_SRC emacs-lisp
   (global-font-lock-mode t)
@@ -600,9 +604,15 @@ working on.
 (push "~/Projects/hppsimulations/WORKING_DOC/pma.org" org-agenda-files)
 (push "~/Projects/hppsimulations/newpma/newpma.org" org-agenda-files)
 
+(push "~/Copy/Doutorado/thesis_proposal/thesis_proposal.org" org-agenda-files) ; thesis proposal
+
 (push "~/Copy/Projects/ParVoronoi-wiki/graphprocessing.org" org-agenda-files)
+  
 
 #+end_src
+
+#+RESULTS:
+| ~/Copy/Projects/ParVoronoi-wiki/graphprocessing.org | ~/Copy/Doutorado/thesis_proposal/thesis_proposal.org | ~/Projects/hppsimulations/newpma/newpma.org | ~/Projects/hppsimulations/WORKING_DOC/pma.org | ~/Projects/hppsimulations/LabBook.org | ~/Copy/Projects/ParVoronoi-wiki/graphprocessing.org | ~/Copy/Doutorado/thesis_proposal/thesis_proposal.org | ~/Copy/Projects/Doutohppsimulations/newpma/newpma.org | ~/Projects/hppsimulations/newpma/newpma.org | ~/Projects/hppsimulations/WORKING_DOC/pma.org | ~/Projects/hppsimulations/LabBook.org | ~/Copy/Doutorado/thesis_proposal/thesis_proposal.org | ~/Copy/Projects/ParVoronoi-wiki/graphprocessing.org | ~/Projects/hppsimulations/WORKING_DOC/pma.org | ~/Projects/hppsimulations/LabBook.org | ~/Copy/Doutorado/activity-log.org | ~/Copy/julio-personal.org |
 
 *** TODO Google agenda                                     :ARNAUD:ARCHIVE:
 :PROPERTIES:
@@ -717,7 +727,7 @@ TO FIX: org-attach-expand-link is only defined after we do =C-c C-a=
 #+END_SRC
 [16:34:01; 24.04.2013]
 
-** Adding date with command "C-c t":                                   :LUKA:
+** Adding date with command "C-c t":                             :LUKA:
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-c t") 'insert-time-date)
 (defun insert-time-date (prefix)
