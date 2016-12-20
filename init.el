@@ -1,3 +1,11 @@
+(require 'package)
+(package-initialize)
+(setq package-archives
+'( ;("ELPA" . "http://tromey.com/elpa/")
+   ("gnu" . "http://elpa.gnu.org/packages/")
+   ("org" . "http://orgmode.org/elpa/" )
+   ("melpa" . "http://melpa.org/packages/")
+   ("marmalade" . "http://marmalade-repo.org/packages/")))
 
 (require 'org)
 (eval-after-load "org-archive"
@@ -30,15 +38,7 @@
           (message "Subtree %s" (if set "archived" "unarchived"))))))
 )
 
-(require 'package)
-(package-initialize)
-(setq package-archives
-'( ;("ELPA" . "http://tromey.com/elpa/")
-   ("gnu" . "http://elpa.gnu.org/packages/")
-   ("melpa" . "http://melpa.org/packages/")
-   ("marmalade" . "http://marmalade-repo.org/packages/")))
-
-(require 'org-install)
+;;(require 'org-install)
 (require 'org)
 ;; (require 'org-html)
 
@@ -73,6 +73,7 @@
 (setq inhibit-splash-screen t)
 
 (require 'recentf)
+(setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
@@ -80,6 +81,9 @@
 (setq frame-title-format
   '("Emacs - " (buffer-file-name "%f"
     (dired-directory dired-directory "%b"))))
+
+; (set-default-font "9x15")
+(set-face-attribute 'default nil :height 115)
 
   (global-font-lock-mode t)
   (custom-set-faces
@@ -110,7 +114,7 @@
     )
   )
 
-(global-set-key (kbd "C-x 4 t") 'swap-buffers-in-windows) 
+(global-set-key (kbd "C-x 4 t") 'swap-buffers-in-windows)
 
 (setq evil-want-C-i-jump nil)
 (require 'evil)
@@ -254,13 +258,15 @@ Entered on %U
 
 (setq org-agenda-files (quote (
 "~/Copy/Doutorado/activity-log.org"
-"~/Copy/julio-personal.org"
+"~/org/julio-personal.org"
 )))
 
 ; Adds new file to track on the agenda
 (push "~/Projects/hppsimulations/LabBook.org" org-agenda-files)
 (push "~/Projects/hppsimulations/WORKING_DOC/pma.org" org-agenda-files)
 (push "~/Projects/hppsimulations/newpma/newpma.org" org-agenda-files)
+
+(push "~/Copy/Doutorado/thesis_proposal/thesis_proposal.org" org-agenda-files) ; thesis proposal
 
 (push "~/Copy/Projects/ParVoronoi-wiki/graphprocessing.org" org-agenda-files)
 
@@ -295,6 +301,9 @@ Entered on %U
 
 (setq org-ditaa-jar-path "/usr/bin/ditaa")
 
+(require 'ox-extra)
+(ox-extras-activate '(ignore-headlines))
+
 (global-set-key (kbd "C-c d") 'insert-date)
 (defun insert-date (prefix)
     "Insert the current date. With prefix-argument, use ISO format. With
@@ -312,7 +321,7 @@ Entered on %U
     (interactive "P")
     (let ((format (cond
                    ((not prefix) "[%H:%M:%S; %d.%m.%Y]")
-                   ((equal prefix '(4)) "[%H:%M:%S; %Y-%m-%d]"))))
+                   ((equal prefix '(4)) "%H%M%S%Y%m%d"))))
       (insert (format-time-string format))))
 
 (global-set-key (kbd "C-c l") 'org-store-link)
@@ -345,7 +354,7 @@ Entered on %U
    'org-babel-load-languages
    '(
      (C . t)
-     (sh . t)
+     (shell . t)
      (python . t)
      (R . t)
      (ruby . t)
@@ -383,10 +392,10 @@ Entered on %U
         '("P" "#+begin_src python :results output :exports both :session\n?\n#+end_src" "<src lang=\"python\">\n\n</src>"))
 
 (add-to-list 'org-structure-template-alist
-        '("ip" "#+begin_src ipython :results output :exports both :session\n?\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
+        '("ip" "#+begin_src ipython :exports both :results output :session\n?\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
 
 (add-to-list 'org-structure-template-alist
-        '("IP" "#+begin_src ipython :results output :exports both :session\n?\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
+        '("IP" "#+begin_src ipython :exports both :results output :session ?\n\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
 
 (add-to-list 'org-structure-template-alist
         '("b" "#+begin_src sh :results output :exports both\n?\n#+end_src" "<src lang=\"sh\">\n\n</src>"))
@@ -434,6 +443,35 @@ Entered on %U
 ;;Search bibtex
 ;;(global-set-key (kbd "C-c C-x [") 'helm-bibtex)
 
+(eval-after-load "helm-bibtex" 
+'(defun helm-bibtex-find-pdf-in-field (key-or-entry)
+    "Returns the path of the PDF specified in the field
+`helm-bibtex-pdf-field' if that file exists.  Returns nil if no
+file is specified, or if the specified file does not exist, or if
+`helm-bibtex-pdf-field' is nil."
+
+    (when helm-bibtex-pdf-field
+      (let* ((entry (if (stringp key-or-entry)
+			(helm-bibtex-get-entry1 key-or-entry t)
+		      key-or-entry))
+	     (value (helm-bibtex-get-value helm-bibtex-pdf-field entry)))
+	(cond
+	 ((not value) nil)         ; Field not defined.
+	 ((f-file? value) value)   ; A bare path was found.
+	 (t				; Assuming Zotero/Mendeley/JabRef format:
+	  (cl-loop  ; Looping over the files:
+	   for record in (s-split ";" value)
+	   for record = (s-split ":" record)
+	   for file-name = (nth 0 record)
+	   for path = (nth 1 record)
+	   if (f-file? path)
+	   collect (f-full path)
+	   else if (f-file? (f-full (f-join path file-name)))
+	   collect (f-full (f-join path file-name))
+	   ;; This is to work around a bug in Mendeley.
+	   else if (f-file? (concat "/" path))
+	   collect ( concat "/" path))))))))
+
 ;;(require 'helm-bibtex)
 ;;(setq helm-bibtex-pdf-open-function
 ;;      (lambda (fpath)
@@ -476,6 +514,8 @@ Entered on %U
 
 ;(setq org-latex-to-pdf-process '("bibtex `basename %f | sed 's/\.tex//'`"))
 
+(add-to-list 'org-latex-classes '("article" "\\documentclass{article}\n \[NO-DEFAULT-PACKAGES]\n \[EXTRA]\n  \\usepackage{graphicx}\n  \\usepackage{hyperref}"  ("\\section{%s}" . "\\section*{%s}") ("\\subsection{%s}" . "\\subsection*{%s}")                       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")                       ("\\paragraph{%s}" . "\\paragraph*{%s}")                       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
 (add-to-list 'org-latex-classes
              '("beamer"
                "\\documentclass\[presentation\]\{beamer\}"
@@ -488,7 +528,7 @@ Entered on %U
   (warn "toc-org not found"))
 
 (require 'tramp)
-(setq tramp-default-method "scp")
+(setq tramp-default-method "ssh")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

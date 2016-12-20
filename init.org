@@ -53,7 +53,23 @@ Next time, simply reload changes with "C-c i". If some stuff does not
 work (in particular in the org-mode website generation section or in
 the tabs section), just comment them and proceeed.
 
-* Hack to customize the configuration file                           :JULIO:
+* Loading files:
+** ELPA
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(package-initialize)
+(setq package-archives
+'( ;("ELPA" . "http://tromey.com/elpa/")
+   ("gnu" . "http://elpa.gnu.org/packages/")
+   ("org" . "http://orgmode.org/elpa/" )
+   ("melpa" . "http://melpa.org/packages/")
+   ("marmalade" . "http://marmalade-repo.org/packages/")))
+
+#+END_SRC
+
+#+RESULTS:
+
+** Hack to customize the configuration file                          :JULIO:
 
 - [X] Discover why this block is not beeing tangled.  
   This was because of the PROPERTY block in the BEGIN_EXAMPLE drawer was
@@ -104,17 +120,6 @@ The code block bellow adds the following property in archived trees:
 #+RESULTS:
 : org-toggle-archive-tag
 
-* Loading files:
-** ELPA
-#+BEGIN_SRC emacs-lisp
-(require 'package)
-(package-initialize)
-(setq package-archives
-'( ;("ELPA" . "http://tromey.com/elpa/")
-   ("gnu" . "http://elpa.gnu.org/packages/")
-   ("melpa" . "http://melpa.org/packages/")
-   ("marmalade" . "http://marmalade-repo.org/packages/")))
-#+END_SRC
 ** Adding .el files stored in folder elisp:                    :WEB:ARCHIVE:
 :PROPERTIES:
 :header-args: :tangle no
@@ -132,7 +137,7 @@ The code block bellow adds the following property in archived trees:
 [10:42:15; 24.06.2013]
 ** Loading babel:                                                    :ARNAUD:
 #+BEGIN_SRC emacs-lisp
-(require 'org-install)
+;;(require 'org-install)
 (require 'org)
 ;; (require 'org-html)
 #+END_SRC
@@ -712,6 +717,15 @@ TO FIX: org-attach-expand-link is only defined after we do =C-c C-a=
 #+begin_src emacs-lisp
 (setq org-ditaa-jar-path "/usr/bin/ditaa")
 #+end_src
+** Export settings
+Use the :ignore: on headlines to ignore the heading on export but not
+theis content. 
+
+#+begin_src emacs-lisp
+(require 'ox-extra)
+(ox-extras-activate '(ignore-headlines))
+#+end_src
+
 * Org-mode shortcuts
 ** Adding date with brackets with command "C-c d":                     :LUKA:
 #+BEGIN_SRC emacs-lisp
@@ -841,7 +855,7 @@ Next and previous occurence on the sparse tree
    'org-babel-load-languages
    '(
      (C . t)
-     (sh . t)
+     (shell . t)
      (python . t)
      (R . t)
      (ruby . t)
