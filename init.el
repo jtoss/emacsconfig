@@ -237,12 +237,17 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 (setq org-default-notes-file "~/org/notes.org")
      (define-key global-map "\C-cd" 'org-capture)
-(setq org-capture-templates (quote (("t" "Todo" entry (file+headline "~/org/liste.org" "Tasks") "* TODO %?
+(setq org-capture-templates (quote (
+("t" "Todo" entry (file+headline "~/org/teste.org" "%t" ) "* TODO %?
   %i
-  %a" :prepend t) ("j" "Journal" entry (file+datetree "~/org/journal.org") "* %?
+  %a" :prepend t) 
+("j" "Journal" entry (file+datetree "~/org/teste.org") "* %?
 Entered on %U
   %i
   %a"))))
+
+(add-to-list 'org-agenda-custom-commands
+             '("D" "Diary's todos" tags "diary/TODO|DONE"))
 
 (setq org-agenda-include-all-todo t)
 (setq org-agenda-include-diary t)
