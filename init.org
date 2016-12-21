@@ -580,13 +580,17 @@ Entered on %U
 #+RESULTS:
 | t | Todo | entry | (file+headline ~/org/teste.org %t) | * TODO %? |
 
-*** Agenda custom commands
-
+*** Agenda custom commands                                          :JULIO:
+http://pages.sachachua.com/.emacs.d/Sacha.html
 **** Match :diary: tag with TODO or DONE todo-keywords
 #+begin_src emacs-lisp
-(add-to-list 'org-agenda-custom-commands
-             '("D" "Diary's todos" tags "diary/TODO|DONE"))
+(setq org-agenda-custom-commands
+             '(("D" "Diary's todos" tags "diary/TODO|DONE"))
+)
 #+end_src
+
+#+RESULTS:
+| D | Diary's todos | tags | diary/TODO | DONE |
 
 *** Agenda config                                                    :ARNAUD:
 #+BEGIN_SRC emacs-lisp
@@ -1094,7 +1098,7 @@ Set the path to bibtex library.
 #+RESULTS:
 : file
 
-*** TODO Helm key-bindings
+*** TODO Helm -bindings
 :PROPERTIES:
 :END:
 Doesn't work... I wanted to replace the reftex shortcut
@@ -1177,7 +1181,7 @@ this is the "<f2>" shortcut on helm-bibtex
 #+END_SRC
 
 #+RESULTS:
-| lambda | (fpath) | (start-process mendeleydesktop *helm-bibtex-mendeleydesktop* /usr/bin/mendeleydesktop fpath) |
+| lambda | (fpath) | (call-process mendeleydesktop nil 0 nil fpath) |
 
 *** Insert org-mode citation as a link to the pdf file            :ARCHIVE:
 :PROPERTIES:

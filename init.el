@@ -86,8 +86,13 @@
 (set-face-attribute 'default nil :height 115)
 
   (global-font-lock-mode t)
-  (custom-set-faces
-    '(flyspell-incorrect ((t (:inverse-video t)))))
+  
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(flyspell-incorrect ((t (:inverse-video t)))))
   ;;  (set-face-attribute 'flyspell-incorrect (t (:inverse-video t)))
 
 (line-number-mode 1)
@@ -246,8 +251,9 @@ Entered on %U
   %i
   %a"))))
 
-(add-to-list 'org-agenda-custom-commands
-             '("D" "Diary's todos" tags "diary/TODO|DONE"))
+(setq org-agenda-custom-commands
+             '(("D" "Diary's todos" tags "diary/TODO|DONE"))
+)
 
 (setq org-agenda-include-all-todo t)
 (setq org-agenda-include-diary t)
@@ -543,11 +549,11 @@ file is specified, or if the specified file does not exist, or if
  '(custom-enabled-themes (quote (tango-dark)))
  '(display-buffer-alist nil)
  '(markdown-command "pandoc")
-'(org-html-postamble-format (quote (("en" "<p class=\"author\">Author: %a (%e)</p>
+ '(org-agenda-files
+   (quote
+    ("~/Copy/Projects/ParVoronoi-wiki/graphprocessing.org" "~/Copy/Doutorado/thesis_proposal/thesis_proposal.org" "~/Projects/hppsimulations/WORKING_DOC/pma.org" "~/Projects/hppsimulations/LabBook.org" "~/Copy/Doutorado/activity-log.org" "~/org/julio-personal.org")))
+ '(org-html-postamble-format
+   (quote
+    (("en" "<p class=\"author\">Author: %a (%e)</p>
 <p class=\"date\">Date: %d</p>")))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
