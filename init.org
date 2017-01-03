@@ -69,7 +69,13 @@ the tabs section), just comment them and proceeed.
 
 #+RESULTS:
 
-** Hack to customize the configuration file                          :JULIO:
+** COMMENT Hack to customize the configuration file                          :JULIO:
+
+:UPDATE:
+This same function can be achived by commeting subtrees with 
+=C-c ;=
+:END:
+
 
 - [X] Discover why this block is not beeing tangled.  
   This was because of the PROPERTY block in the BEGIN_EXAMPLE drawer was
@@ -208,6 +214,12 @@ https://www.emacswiki.org/emacs/RecentFiles#toc9
     (dired-directory dired-directory "%b"))))
 #+END_SRC
 [16:29:40; 24.04.2013]
+** Emacs theme                                                       :JULIO:
+
+#+begin_src emacs-lisp
+(load-theme 'tango-dark t)
+#+end_src
+
 ** Font size                                                        :ARNAUD:
 :PROPERTIES:
 :END:
@@ -859,38 +871,50 @@ Next and previous occurence on the sparse tree
 #+END_SRC
 
 * Org-mode + babel:
+There is a bug on this section
 ** Seamless use of babel (no confirmation, lazy export)             :ARNAUD:
 :PROPERTIES:
 :END:
 #+BEGIN_SRC emacs-lisp
-(setq org-export-babel-evaluate nil)
-(setq org-confirm-babel-evaluate nil)
+;; Evaluates src blocks during export (the header arguments at least)
+(setq org-export-babel-evaluate t) 
+
+;; Dont ask for confirmation on export 
+(setq org-confirm-babel-evaluate t)
 #+END_SRC
+
+#+RESULTS:
+
 ** Some initial languages we want org-babel to support:              :ARNAUD:
 #+BEGIN_SRC emacs-lisp
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(
+     (emacs-lisp . t)
      (C . t)
-     (shell . t)
      (python . t)
+ ;    (sh . t) ;; BUG for some reason this causes a conflict when exporting
+     (shell . t)
      (R . t)
-     (ruby . t)
-     (ocaml . t)
+   ;  (ruby . t)
+   ;  (ocaml . t)
      (ditaa . t)
-     (dot . t)
-     (octave . t)
-     (sqlite . t)
-     (perl . t)
-     (screen . t)
-     (plantuml . t)
-     (lilypond . t)
+   ;  (dot . t)
+   ;  (octave . t)
+   ;  (sqlite . t)
+   ;  (perl . t)
+   ;  (screen . t)
+   ;  (plantuml . t)
+   ;  (lilypond . t)
      (org . t)
      (makefile . t)
      (latex . t)
      ))
   (setq org-src-preserve-indentation t)
 #+END_SRC
+
+#+RESULTS:
+: t
 
 ** Adding source code blocks:                                          :LUKA:
 *** With capital letters:
@@ -1298,7 +1322,10 @@ https://gitlab.com/yuvallanger/worg/blob/ed18772a5015bee9159d55459bbfee4bda66941
 #+end_src 
 
 * Org-mode for github
-** toc-org
+** toc-org :ARCHIVE:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 [[https://github.com/snosov1/toc-org][toc-org]] helps you to have an up-to-date table of contents in org files
 without exporting (useful primarily for readme files on GitHub).
 #+BEGIN_SRC emacs-lisp
@@ -1336,7 +1363,7 @@ another user, if you want to open some file as root you can use,
     C-x C-f /root@127.0.0.1:/path/to/file
 
 [12:25:12; 13.06.2013]
-* Custom-set-variables                                                :JULIO:
+* COMMENT Custom-set-variables                                                :JULIO:
 Copy of the old configuration on my init.el that emacs put
 automatically.
 
