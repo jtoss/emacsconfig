@@ -880,7 +880,7 @@ There is a bug on this section
 (setq org-export-babel-evaluate t) 
 
 ;; Dont ask for confirmation on export 
-(setq org-confirm-babel-evaluate t)
+(setq org-confirm-babel-evaluate nil)
 #+END_SRC
 
 #+RESULTS:
@@ -935,13 +935,13 @@ To use this type <m and then TAB
 To use this type <r and then TAB
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-structure-template-alist
-        '("r" "#+begin_src R :results output :session :exports both\n?\n#+end_src" "<src lang=\"R\">\n\n</src>"))
+        '("r" "#+begin_src R :results output :exports both :session ?\n\n#+end_src" "<src lang=\"R\">\n\n</src>"))
 #+END_SRC
 
 To use this type <R and then TAB
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-structure-template-alist
-        '("R" "#+begin_src R :results output graphics :file (org-babel-temp-file \"figure\" \".png\") :exports both :width 600 :height 400 :session\n?\n#+end_src" "<src lang=\"R\">\n\n</src>"))
+        '("R" "#+begin_src R :results output graphics :file (org-babel-temp-file \"figure\" \".png\") :exports both :width 600 :height 400 :session ?\n\n#+end_src" "<src lang=\"R\">\n\n</src>"))
 #+END_SRC
 
 *** Python code:
