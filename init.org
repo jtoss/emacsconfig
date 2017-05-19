@@ -490,15 +490,17 @@ for pointing me out that I had forgotten the "require" line... :)
 (defun auto-fill-mode-on () (TeX-PDF-mode 1))
 (add-hook 'tex-mode-hook 'TeX-PDF-mode-on)
 (add-hook 'latex-mode-hook 'TeX-PDF-mode-on)
+
 (setq TeX-PDF-mode t)
 #+END_SRC
 ** Auto-fill-mode
 #+BEGIN_SRC emacs-lisp
 (defun auto-fill-mode-on () (auto-fill-mode 1))
-(add-hook 'text-mode-hook 'auto-fill-mode-on)
-(add-hook 'emacs-lisp-mode 'auto-fill-mode-on)
-(add-hook 'tex-mode-hook 'auto-fill-mode-on)
-(add-hook 'latex-mode-hook 'auto-fill-mode-on)
+
+;; (add-hook 'text-mode-hook 'auto-fill-mode-on)
+;; (add-hook 'emacs-lisp-mode 'auto-fill-mode-on)
+;; (add-hook 'tex-mode-hook 'auto-fill-mode-on)
+;; (add-hook 'latex-mode-hook 'auto-fill-mode-on)
 #+END_SRC
 ** C coding style                                                       :WEB:
 From [[http://www.emacswiki.org/emacs/IndentingC]].
@@ -623,7 +625,7 @@ http://pages.sachachua.com/.emacs.d/Sacha.html
 
 #+begin_src emacs-lisp
 (setq org-agenda-files (quote (
-"~/Copy/Doutorado/activity-log.org"
+"~/Sync/Doutorado/activity-log.org"
 "~/org/julio-personal.org"
 )))
 #+end_src
@@ -635,7 +637,8 @@ working on.
 #+begin_src emacs-lisp
 ; Adds new file to track on the agenda
 (push "~/Projects/hppsimulations/LabBook.org" org-agenda-files)
-(push "~/Projects/hppsimulations/WORKING_DOC/pma.org" org-agenda-files)
+; (push "~/Projects/hppsimulations/WORKING_DOC/pma.org" org-agenda-files)
+
 (push "~/Projects/hppsimulations/newpma/newpma.org" org-agenda-files)
 
 (push "~/Copy/Doutorado/thesis_proposal/thesis_proposal.org" org-agenda-files) ; thesis proposal
@@ -1363,6 +1366,16 @@ another user, if you want to open some file as root you can use,
     C-x C-f /root@127.0.0.1:/path/to/file
 
 [12:25:12; 13.06.2013]
+* Magit                                                               :JULIO:
+
+Status buffer
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x g") 'magit-status)
+#+end_src
+
+#+RESULTS:
+: magit-status
+
 * COMMENT Custom-set-variables                                                :JULIO:
 Copy of the old configuration on my init.el that emacs put
 automatically.
