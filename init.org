@@ -568,6 +568,26 @@ don't want is there, but I haven't had any such problems yet.
 #+BEGIN_SRC emacs-lisp
 (setq org-directory "~/org/")
 #+END_SRC
+** Archive behaviour 
+When the file becomes too big it is usefull to archive sub-trees that I'm not currently working anymore.
+
+Subtrees can be archived to another file with =C-c C-x C-a= (calls the default archiving command)
+
+*** Asks for confirmation before archiving
+#+begin_src emacs-lisp
+(define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-subtree-default-with-confirmation)
+#+end_src
+
+
+*** Add the archive files to agenda search
+https://emacs.stackexchange.com/questions/28888/org-mode-clarify-the-concept-and-practice-of-archiving
+#+begin_src emacs-lisp
+(setq org-agenda-text-search-extra-files '("~/Sync/Doutorado/activity-log.org_archive"))
+#+end_src
+
+#+RESULTS:
+| ~/Sync/Doutorado/activity-log.org_archive |
+
 ** Cosmetics
 #+BEGIN_SRC emacs-lisp
 (setq org-hide-leading-stars t)
@@ -581,6 +601,9 @@ don't want is there, but I haven't had any such problems yet.
 ;;(setq org-cycle-include-plain-lists 'integrate) ;; fold plain list when cycling heading visibility
 (setq org-cycle-include-plain-lists (quote integrate))
 #+END_SRC
+
+#+RESULTS:
+: integrate
 
 ** Agenda
 *** Add short cut keys for the org-agenda                            :ARNAUD:
