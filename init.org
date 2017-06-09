@@ -551,6 +551,18 @@ don't want is there, but I haven't had any such problems yet.
   (require 'iso-transl)
 #+end_src
 
+* Auctex
+
+#+begin_src emacs-lisp
+(defun turn-on-outline-minor-mode ()
+(outline-minor-mode 1))
+
+(add-hook 'LaTeX-mode-hook 'turn-on-outline-minor-mode)
+(add-hook 'latex-mode-hook 'turn-on-outline-minor-mode)
+(setq outline-minor-mode-prefix "\C-c \C-o") ; Or something else
+#+end_src
+
+
 * Org-mode convenient configuration
 ** Default directory
 #+BEGIN_SRC emacs-lisp
@@ -745,7 +757,7 @@ TO FIX: org-attach-expand-link is only defined after we do =C-c C-a=
 #+begin_src emacs-lisp
 (require 'org-inlinetask)
 #+end_src
-** Ditaa                                                  :JULIO:
+** Ditaa                                                             :JULIO:
 #+begin_src emacs-lisp
 (setq org-ditaa-jar-path "/usr/bin/ditaa")
 #+end_src
@@ -757,6 +769,13 @@ theis content.
 (require 'ox-extra)
 (ox-extras-activate '(ignore-headlines))
 #+end_src
+
+** Prevent invisible edits                                           :JULIO:
+#+begin_src emacs-lisp
+(setq org-catch-invisible-edits nil)
+#+end_src
+
+#+RESULTS:
 
 * Org-mode shortcuts
 ** Adding date with brackets with command "C-c d":                     :LUKA:
@@ -1068,6 +1087,11 @@ https://github.com/gregsexton/ob-ipython/issues/52
 (setq exec-path (append '("/home/julio/anaconda3/bin") exec-path))
 #+end_src
 
+
+** EIN - Emacs Ipython Notebook
+#+begin_src emacs-lisp
+(require 'ein)
+#+end_src
 
 ** Noweb evaluation                                                  :JULIO:
 use fast name resolution of noweb reference .  
