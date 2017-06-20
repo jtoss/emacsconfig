@@ -665,7 +665,7 @@ http://pages.sachachua.com/.emacs.d/Sacha.html
 )))
 #+end_src
 
-**** Extra files to add to the agenda
+**** COMMENT Extra files to add to the agenda
 These files are the org files of the projects that I am currently 
 working on. 
 
@@ -1130,7 +1130,7 @@ https://github.com/jkitchin/org-ref
 
 #+begin_src emacs-lisp
 (require 'org-ref)
-(setq reftex-default-bibliography '("~/Documents/Mendeley/library.bib"))
+; (setq reftex-default-bibliography '("~/Documents/Mendeley/library.bib"))
 #+end_src
 
 #+RESULTS:
@@ -1146,6 +1146,13 @@ https://github.com/jkitchin/org-ref
 
 #+RESULTS:
 | ~/Documents/Mendeley/library.bib |
+
+#+begin_src emacs-lisp
+(setq org-ref-open-pdf-function 'org-ref-get-mendeley-filename)
+#+end_src
+
+#+RESULTS:
+: org-ref-get-mendeley-filename
 
 ** TODO Helm-bibtex configuration                                     :JULIO:
   https://github.com/tmalsburg/helm-bibtex
