@@ -63,7 +63,9 @@ the tabs section), just comment them and proceeed.
    ("gnu" . "http://elpa.gnu.org/packages/")
    ("org" . "http://orgmode.org/elpa/" )
    ("melpa" . "http://melpa.org/packages/")
-   ("marmalade" . "http://marmalade-repo.org/packages/")))
+   ;("marmalade" . "http://marmalade-repo.org/packages/")
+)
+)
 
 #+END_SRC
 
@@ -938,6 +940,7 @@ There is a bug on this section
      (emacs-lisp . t)
      (C . t)
      (python . t)
+     (ein . t)
  ;    (sh . t) ;; BUG for some reason this causes a conflict when exporting
      (shell . t)
      (R . t)
@@ -1003,10 +1006,10 @@ https://github.com/gregsexton/ob-ipython#tips-and-tricks
 Ipython must have a :session argument
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-structure-template-alist
-        '("ip" "#+begin_src ipython :exports both :results output :session\n?\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
+        '("ip" "#+begin_src ipython :exports both :results output :session ? \n\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
 
 (add-to-list 'org-structure-template-alist
-        '("IP" "#+begin_src ipython :exports both :results output :session ?\n\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
+        '("IP" "#+begin_src ipython :exports both :file (org-babel-temp-file \"figure\" \".png\") :session ?\n\n#+end_src" "<src lang=\"ipython\">\n\n</src>"))
 #+END_SRC
 
 *** Bash "sh" code:
@@ -1110,6 +1113,13 @@ https://github.com/gregsexton/ob-ipython/issues/52
 (setq exec-path (append '("/home/julio/anaconda3/bin") exec-path))
 #+end_src
 
+#+RESULTS:
+| /home/julio/anaconda3/bin | /usr/local/sbin | /usr/local/bin | /usr/sbin | /usr/bin | /sbin | /bin | /usr/games | /usr/local/games | /snap/bin | /usr/lib/jvm/java-8-oracle/bin | /usr/lib/jvm/java-8-oracle/db/bin | /usr/lib/jvm/java-8-oracle/jre/bin | /usr/lib/emacs/24.5/x86_64-linux-gnu |
+
+
+**** TODO key-binding for getting documentation
+
+bind =ob-ipython-inspect= to some key
 
 ** EIN - Emacs Ipython Notebook
 #+begin_src emacs-lisp
