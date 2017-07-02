@@ -63,7 +63,9 @@ the tabs section), just comment them and proceeed.
    ("gnu" . "http://elpa.gnu.org/packages/")
    ("org" . "http://orgmode.org/elpa/" )
    ("melpa" . "http://melpa.org/packages/")
-   ("marmalade" . "http://marmalade-repo.org/packages/")))
+;;   ("marmalade" . "http://marmalade-repo.org/packages/")
+)
+)
 
 #+END_SRC
 
@@ -319,11 +321,11 @@ Set a shortcut for this function
 
 ** Recenter cursor positions in the windoe                           :JULIO:
 #+begin_src emacs-lisp
-(setq recenter-positions '(middle 0.08 bottom)))
+(setq recenter-positions '(middle 0.06 bottom))
 #+end_src
 
 #+RESULTS:
-| middle | 0.08 | bottom |
+| middle | 0.06 | bottom |
 
 ** Evilmode                                                          :JULIO:
 Emulates the Vim commands in emacs
@@ -1099,7 +1101,7 @@ https://github.com/gregsexton/ob-ipython/issues/52
 
 ** COMMENT EIN - Emacs Ipython Notebook
 #+begin_src emacs-lisp
-(require 'ein)
+;;(require 'ein)
 #+end_src
 
 ** Noweb evaluation                                                  :JULIO:
