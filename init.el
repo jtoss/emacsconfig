@@ -298,6 +298,13 @@ Entered on %U
 
 (setq org-catch-invisible-edits nil)
 
+(setq org-file-apps
+'((auto-mode . emacs)
+     ("\\.mm\\'" . default)
+     ("\\.x?html?\\'" . default)
+     ("\\.pdf\\'" . default)
+     (system . "setsid xdg-open %s")))
+
 (global-set-key (kbd "C-c d") 'insert-date)
 (defun insert-date (prefix)
     "Insert the current date. With prefix-argument, use ISO format. With

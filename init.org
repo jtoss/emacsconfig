@@ -788,6 +788,19 @@ theis content.
 
 #+RESULTS:
 
+** Org-mode file association                                         :JULIO:
+
+Use "xdg-open" as default commant for openning files with =C-u C-u C-x C-o=
+
+note that =setsid= is requeried to avoid emacs killing the terminal where xdg-open started.
+#+begin_src emacs-lisp
+(setq org-file-apps
+'((auto-mode . emacs)
+     ("\\.mm\\'" . default)
+     ("\\.x?html?\\'" . default)
+     ("\\.pdf\\'" . default)
+     (system . "setsid xdg-open %s")))
+#+end_src
 * Org-mode shortcuts
 ** Adding date with brackets with command "C-c d":                     :LUKA:
 #+BEGIN_SRC emacs-lisp
