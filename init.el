@@ -529,6 +529,21 @@ file is specified, or if the specified file does not exist, or if
                ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
 
+; (require 'ox-md nil t)
+;(require 'ox-gfm nil t)
+(require 'ox-pandoc)
+
+(defun rst-replace-image-links ()
+  "Fix image links after rst export."
+  (goto-char (point-min))
+  (while 
+      (re-search-forward "image:: \\(file:\\)" nil t)
+    (replace-match "" nil nil nil 1)
+    )
+  )
+
+( add-hook 'org-pandoc-after-processing-rst-hook 'rst-replace-image-links )
+
 (require 'tramp)
 (setq tramp-default-method "ssh")
 

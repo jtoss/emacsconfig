@@ -1372,6 +1372,33 @@ https://gitlab.com/yuvallanger/worg/blob/ed18772a5015bee9159d55459bbfee4bda66941
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
 #+end_src 
 
+* Org-mode Pandoc export
+#+begin_src emacs-lisp
+; (require 'ox-md nil t)
+;(require 'ox-gfm nil t)
+(require 'ox-pandoc)
+#+end_src
+
+#+RESULTS:
+: ox-pandoc
+
+hook to fix image format after rst export
+#+begin_src emacs-lisp
+(defun rst-replace-image-links ()
+  "Fix image links after rst export."
+  (goto-char (point-min))
+  (while 
+      (re-search-forward "image:: \\(file:\\)" nil t)
+    (replace-match "" nil nil nil 1)
+    )
+  )
+
+( add-hook 'org-pandoc-after-processing-rst-hook 'rst-replace-image-links ) 
+#+end_src
+
+#+RESULTS:
+| rst-replace-image-links |
+
 * Org-mode for github
 ** toc-org :ARCHIVE:
 :PROPERTIES:
