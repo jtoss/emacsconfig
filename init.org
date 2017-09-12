@@ -1033,9 +1033,27 @@ To use this type <B and then TAB. This comes with a session argument
 
 C++ 11 
 #+begin_src emacs-lisp
+; without main
 (add-to-list 'org-structure-template-alist
-        '("CPP" "#+begin_src C++ :flags -std=c++11 :includes <iostream> \n\n#+end_src" "<src lang=\"c++\">\n\n</src>"))
+        '("cpp" "#+begin_src C++ :flags -std=c++11 :includes '(<iostream> <vector>) 
+using namespace std;\n\n?\n#+end_src" "<src lang=\"c++\">\n\n</src>"))
+
+; with main
+(add-to-list 'org-structure-template-alist
+        '("CPP" "#+begin_src C++ :flags -std=c++11 :includes '(<iostream> <vector>)
+using namespace std;
+
+int main(){
+  ?
+
+  return 0;
+}\n#+end_src" "<src lang=\"c++\">\n\n</src>"))
 #+end_src 
+
+#+RESULTS:
+| CPP | #+begin_src C++ :flags -std=c++11 :includes '(<iostream> <vector>) |
+
+
 
 C 
 #+begin_src emacs-lisp
