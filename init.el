@@ -5,37 +5,8 @@
    ("gnu" . "http://elpa.gnu.org/packages/")
    ("org" . "http://orgmode.org/elpa/" )
    ("melpa" . "http://melpa.org/packages/")
-   ("marmalade" . "http://marmalade-repo.org/packages/")))
-
-(require 'org)
-(eval-after-load "org-archive"
-  '(defun org-toggle-archive-tag (&optional find-done)
-    "Toggle the archive tag for the current headline.
-  With prefix ARG, check all children of current headline and offer tagging
-  the children that do not contain any open TODO items."
-    (interactive "P")
-    (if (and (org-region-active-p) org-loop-over-headlines-in-active-region)
-        (let ((cl (if (eq org-loop-over-headlines-in-active-region 'start-level)
-                      'region-start-level 'region))
-              org-loop-over-headlines-in-active-region)
-          (org-map-entries
-           `(org-toggle-archive-tag ,find-done)
-           org-loop-over-headlines-in-active-region
-           cl (if (outline-invisible-p) (org-end-of-subtree nil t))))
-      (if find-done
-          (org-archive-all-done 'tag)
-        (let (set)
-          (save-excursion
-            (org-back-to-heading t)
-            (setq set (org-toggle-tag org-archive-tag))
-            (when set (hide-subtree)))
-          (if (org-entry-get (point) "header-args")  
-              (org-delete-property "header-args" )
-            (org-set-property
-             "header-args"
-             ":tangle no"))      
-          (and set (beginning-of-line 1))
-          (message "Subtree %s" (if set "archived" "unarchived"))))))
+;;   ("marmalade" . "http://marmalade-repo.org/packages/")
+)
 )
 
 ;;(require 'org-install)
@@ -82,17 +53,15 @@
   '("Emacs - " (buffer-file-name "%f"
     (dired-directory dired-directory "%b"))))
 
-; (set-default-font "9x15")
-(set-face-attribute 'default nil :height 115)
+(load-theme 'tango-dark t)
+
+;;(set-face-attribute 'default nil :font "DejaVu Sans Condensed")
+(set-face-attribute 'default nil :font "DejaVu Sans Mono Book")
+(set-face-attribute 'default nil :height 100)
 
   (global-font-lock-mode t)
-  
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(flyspell-incorrect ((t (:inverse-video t)))))
+  (custom-set-faces
+    '(flyspell-incorrect ((t (:inverse-video t)))))
   ;;  (set-face-attribute 'flyspell-incorrect (t (:inverse-video t)))
 
 (line-number-mode 1)
@@ -120,6 +89,8 @@
   )
 
 (global-set-key (kbd "C-x 4 t") 'swap-buffers-in-windows)
+
+(setq recenter-positions '(middle 0.06 bottom))
 
 (setq evil-want-C-i-jump nil)
 (require 'evil)
@@ -206,13 +177,15 @@
 (defun auto-fill-mode-on () (TeX-PDF-mode 1))
 (add-hook 'tex-mode-hook 'TeX-PDF-mode-on)
 (add-hook 'latex-mode-hook 'TeX-PDF-mode-on)
+
 (setq TeX-PDF-mode t)
 
 (defun auto-fill-mode-on () (auto-fill-mode 1))
-(add-hook 'text-mode-hook 'auto-fill-mode-on)
-(add-hook 'emacs-lisp-mode 'auto-fill-mode-on)
-(add-hook 'tex-mode-hook 'auto-fill-mode-on)
-(add-hook 'latex-mode-hook 'auto-fill-mode-on)
+
+;; (add-hook 'text-mode-hook 'auto-fill-mode-on)
+;; (add-hook 'emacs-lisp-mode 'auto-fill-mode-on)
+;; (add-hook 'tex-mode-hook 'auto-fill-mode-on)
+;; (add-hook 'latex-mode-hook 'auto-fill-mode-on)
 
   (setq c-default-style "k&r")
   (setq c-basic-offset 2)
@@ -220,6 +193,13 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
   (require 'iso-transl)
+
+(defun turn-on-outline-minor-mode ()
+(outline-minor-mode 1))
+
+(add-hook 'LaTeX-mode-hook 'turn-on-outline-minor-mode)
+(add-hook 'latex-mode-hook 'turn-on-outline-minor-mode)
+(setq outline-minor-mode-prefix "\C-c \C-o") ; Or something else
 
 (setq org-directory "~/org/")
 
@@ -268,13 +248,14 @@ Entered on %U
 ((agenda habit-down time-up priority-down category-keep) (todo category-up priority-down) (tags priority-down category-keep) (search category-keep))))
 
 (setq org-agenda-files (quote (
-"~/Copy/Doutorado/activity-log.org"
+"~/Sync/Doutorado/activity-log.org"
 "~/org/julio-personal.org"
 )))
 
 ; Adds new file to track on the agenda
 (push "~/Projects/hppsimulations/LabBook.org" org-agenda-files)
-(push "~/Projects/hppsimulations/WORKING_DOC/pma.org" org-agenda-files)
+; (push "~/Projects/hppsimulations/WORKING_DOC/pma.org" org-agenda-files)
+
 (push "~/Projects/hppsimulations/newpma/newpma.org" org-agenda-files)
 
 (push "~/Copy/Doutorado/thesis_proposal/thesis_proposal.org" org-agenda-files) ; thesis proposal
@@ -315,6 +296,15 @@ Entered on %U
 (require 'ox-extra)
 (ox-extras-activate '(ignore-headlines))
 
+(setq org-catch-invisible-edits nil)
+
+(setq org-file-apps
+'((auto-mode . emacs)
+     ("\\.mm\\'" . default)
+     ("\\.x?html?\\'" . default)
+     ("\\.pdf\\'" . default)
+     (system . "setsid xdg-open %s")))
+
 (global-set-key (kbd "C-c d") 'insert-date)
 (defun insert-date (prefix)
     "Insert the current date. With prefix-argument, use ISO format. With
@@ -332,7 +322,7 @@ Entered on %U
     (interactive "P")
     (let ((format (cond
                    ((not prefix) "[%H:%M:%S; %d.%m.%Y]")
-                   ((equal prefix '(4)) "%H%M%S%Y%m%d"))))
+                   ((equal prefix '(4)) "%Y%m%d%H%M%S"))))
       (insert (format-time-string format))))
 
 (global-set-key (kbd "C-c l") 'org-store-link)
@@ -358,26 +348,31 @@ Entered on %U
 (global-set-key (kbd "M-n") 'next-error)
 (global-set-key (kbd "M-p") 'previous-error)
 
-(setq org-export-babel-evaluate nil)
+;; Evaluates src blocks during export (the header arguments at least)
+(setq org-export-babel-evaluate t) 
+
+;; Dont ask for confirmation on export 
 (setq org-confirm-babel-evaluate nil)
 
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(
+     (emacs-lisp . t)
      (C . t)
-     (shell . t)
      (python . t)
+ ;    (sh . t) ;; BUG for some reason this causes a conflict when exporting
+     (shell . t)
      (R . t)
-     (ruby . t)
-     (ocaml . t)
+   ;  (ruby . t)
+   ;  (ocaml . t)
      (ditaa . t)
-     (dot . t)
-     (octave . t)
-     (sqlite . t)
-     (perl . t)
-     (screen . t)
-     (plantuml . t)
-     (lilypond . t)
+   ;  (dot . t)
+   ;  (octave . t)
+   ;  (sqlite . t)
+   ;  (perl . t)
+   ;  (screen . t)
+   ;  (plantuml . t)
+   ;  (lilypond . t)
      (org . t)
      (makefile . t)
      (latex . t)
@@ -391,10 +386,10 @@ Entered on %U
         '("m" "#+begin_src emacs-lisp\n\n#+end_src" "<src lang=\"emacs-lisp\">\n\n</src>"))
 
 (add-to-list 'org-structure-template-alist
-        '("r" "#+begin_src R :results output :session :exports both\n?\n#+end_src" "<src lang=\"R\">\n\n</src>"))
+        '("r" "#+begin_src R :results output :exports both :session ?\n\n#+end_src" "<src lang=\"R\">\n\n</src>"))
 
 (add-to-list 'org-structure-template-alist
-        '("R" "#+begin_src R :results output graphics :file (org-babel-temp-file \"figure\" \".png\") :exports both :width 600 :height 400 :session\n?\n#+end_src" "<src lang=\"R\">\n\n</src>"))
+        '("R" "#+begin_src R :results output graphics :file (org-babel-temp-file \"figure\" \".png\") :exports both :width 600 :height 400 :session ?\n\n#+end_src" "<src lang=\"R\">\n\n</src>"))
 
 (add-to-list 'org-structure-template-alist
         '("p" "#+begin_src python :results output :exports both\n?\n#+end_src" "<src lang=\"python\">\n\n</src>"))
@@ -534,26 +529,22 @@ file is specified, or if the specified file does not exist, or if
                ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
 
-(if (require 'toc-org nil t)
-    (add-hook 'org-mode-hook 'toc-org-enable)
-  (warn "toc-org not found"))
+; (require 'ox-md nil t)
+;(require 'ox-gfm nil t)
+(require 'ox-pandoc)
+
+(defun rst-replace-image-links ()
+  "Fix image links after rst export."
+  (goto-char (point-min))
+  (while 
+      (re-search-forward "image:: \\(file:\\)" nil t)
+    (replace-match "" nil nil nil 1)
+    )
+  )
+
+( add-hook 'org-pandoc-after-processing-rst-hook 'rst-replace-image-links )
 
 (require 'tramp)
 (setq tramp-default-method "ssh")
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (tango-dark)))
- '(display-buffer-alist nil)
- '(markdown-command "pandoc")
- '(org-agenda-files
-   (quote
-    ("~/Copy/Projects/ParVoronoi-wiki/graphprocessing.org" "~/Copy/Doutorado/thesis_proposal/thesis_proposal.org" "~/Projects/hppsimulations/WORKING_DOC/pma.org" "~/Projects/hppsimulations/LabBook.org" "~/Copy/Doutorado/activity-log.org" "~/org/julio-personal.org")))
- '(org-html-postamble-format
-   (quote
-    (("en" "<p class=\"author\">Author: %a (%e)</p>
-<p class=\"date\">Date: %d</p>")))))
-
+(global-set-key (kbd "C-x g") 'magit-status)

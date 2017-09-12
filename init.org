@@ -222,13 +222,14 @@ https://www.emacswiki.org/emacs/RecentFiles#toc9
 (load-theme 'tango-dark t)
 #+end_src
 
-** Font size                                                        :ARNAUD:
+** Font size                                                         :JULIO:
 :PROPERTIES:
 :END:
 
 #+BEGIN_SRC emacs-lisp
-; (set-default-font "9x15")
-(set-face-attribute 'default nil :height 115)
+;;(set-face-attribute 'default nil :font "DejaVu Sans Condensed")
+(set-face-attribute 'default nil :font "DejaVu Sans Mono Book")
+(set-face-attribute 'default nil :height 100)
 #+END_SRC
 
 #+RESULTS:
@@ -317,6 +318,13 @@ Set a shortcut for this function
 
 #+RESULTS:
 : swap-buffers-in-windows
+** Recenter cursor positions in the windoe                           :JULIO:
+#+begin_src emacs-lisp
+(setq recenter-positions '(middle 0.06 bottom))
+#+end_src
+
+#+RESULTS:
+| middle | 0.06 | bottom |
 
 ** Evilmode                                                          :JULIO:
 Emulates the Vim commands in emacs
@@ -603,7 +611,6 @@ https://emacs.stackexchange.com/questions/28888/org-mode-clarify-the-concept-and
 ;;(setq org-cycle-include-plain-lists 'integrate) ;; fold plain list when cycling heading visibility
 (setq org-cycle-include-plain-lists (quote integrate))
 #+END_SRC
-
 #+RESULTS:
 : integrate
 
@@ -802,6 +809,19 @@ theis content.
 
 #+RESULTS:
 
+** Org-mode file association                                         :JULIO:
+
+Use "xdg-open" as default commant for openning files with =C-u C-u C-x C-o=
+
+note that =setsid= is requeried to avoid emacs killing the terminal where xdg-open started.
+#+begin_src emacs-lisp
+(setq org-file-apps
+'((auto-mode . emacs)
+     ("\\.mm\\'" . default)
+     ("\\.x?html?\\'" . default)
+     ("\\.pdf\\'" . default)
+     (system . "setsid xdg-open %s")))
+#+end_src
 * Org-mode shortcuts
 ** Adding date with brackets with command "C-c d":                     :LUKA:
 #+BEGIN_SRC emacs-lisp
@@ -1049,11 +1069,8 @@ int main(){
   return 0;
 }\n#+end_src" "<src lang=\"c++\">\n\n</src>"))
 #+end_src 
-
 #+RESULTS:
 | CPP | #+begin_src C++ :flags -std=c++11 :includes '(<iostream> <vector>) |
-
-
 
 C 
 #+begin_src emacs-lisp
@@ -1131,9 +1148,6 @@ https://github.com/gregsexton/ob-ipython/issues/52
 (setq exec-path (append '("/home/julio/anaconda3/bin") exec-path))
 #+end_src
 
-#+RESULTS:
-| /home/julio/anaconda3/bin | /usr/local/sbin | /usr/local/bin | /usr/sbin | /usr/bin | /sbin | /bin | /usr/games | /usr/local/games | /snap/bin | /usr/lib/jvm/java-8-oracle/bin | /usr/lib/jvm/java-8-oracle/db/bin | /usr/lib/jvm/java-8-oracle/jre/bin | /usr/lib/emacs/24.5/x86_64-linux-gnu |
-
 
 **** TODO key-binding for getting documentation
 
@@ -1174,7 +1188,6 @@ https://github.com/jkitchin/org-ref
 
 #+RESULTS:
 | ~/Documents/Mendeley/library.bib |
-
 #+begin_src emacs-lisp
 (setq org-ref-open-pdf-function 'org-ref-get-mendeley-filename)
 #+end_src
@@ -1405,6 +1418,32 @@ https://gitlab.com/yuvallanger/worg/blob/ed18772a5015bee9159d55459bbfee4bda66941
                ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
 #+end_src 
+* Org-mode Pandoc export
+#+begin_src emacs-lisp
+; (require 'ox-md nil t)
+;(require 'ox-gfm nil t)
+(require 'ox-pandoc)
+#+end_src
+
+#+RESULTS:
+: ox-pandoc
+
+hook to fix image format after rst export
+#+begin_src emacs-lisp
+(defun rst-replace-image-links ()
+  "Fix image links after rst export."
+  (goto-char (point-min))
+  (while 
+      (re-search-forward "image:: \\(file:\\)" nil t)
+    (replace-match "" nil nil nil 1)
+    )
+  )
+
+( add-hook 'org-pandoc-after-processing-rst-hook 'rst-replace-image-links ) 
+#+end_src
+
+#+RESULTS:
+| rst-replace-image-links |
 
 * Org-mode for github
 ** toc-org :ARCHIVE:
