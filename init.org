@@ -940,8 +940,8 @@ There is a bug on this section
      (emacs-lisp . t)
      (C . t)
      (python . t)
-     (ein . t)
- ;    (sh . t) ;; BUG for some reason this causes a conflict when exporting
+ ;    (ein . t)
+ ;    (sh . t) ; BUG for some reason this causes a conflict when exporting
      (shell . t)
      (R . t)
    ;  (ruby . t)
@@ -1139,9 +1139,9 @@ https://github.com/gregsexton/ob-ipython/issues/52
 
 bind =ob-ipython-inspect= to some key
 
-** EIN - Emacs Ipython Notebook
+** COMMENT EIN - Emacs Ipython Notebook
 #+begin_src emacs-lisp
-(require 'ein)
+; (require 'ein)
 #+end_src
 
 ** Noweb evaluation                                                  :JULIO:
