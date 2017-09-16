@@ -1423,10 +1423,11 @@ https://gitlab.com/yuvallanger/worg/blob/ed18772a5015bee9159d55459bbfee4bda66941
 ; (require 'ox-md nil t)
 ;(require 'ox-gfm nil t)
 (require 'ox-pandoc)
+(require 'ox-rst)
 #+end_src
 
 #+RESULTS:
-: ox-pandoc
+: ox-rst
 
 hook to fix image format after rst export
 #+begin_src emacs-lisp
