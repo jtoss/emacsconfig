@@ -1418,12 +1418,12 @@ https://gitlab.com/yuvallanger/worg/blob/ed18772a5015bee9159d55459bbfee4bda66941
                ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
 #+end_src 
-* Org-mode Pandoc export
+* COMMENT Org-mode Pandoc export
 #+begin_src emacs-lisp
 ; (require 'ox-md nil t)
 ;(require 'ox-gfm nil t)
 (require 'ox-pandoc)
-(require 'ox-rst)
+
 #+end_src
 
 #+RESULTS:
@@ -1445,6 +1445,35 @@ hook to fix image format after rst export
 
 #+RESULTS:
 | rst-replace-image-links |
+
+* Org-mode rst export
+
+#+begin_src emacs-lisp
+(require 'ox-rst)
+#+end_src
+
+#+RESULTS:
+: ox-rst
+
+Temporary fix for .org link export 
+https://github.com/masayuko/ox-rst/issues/34
+
+http://orgmode.org/manual/Advanced-configuration.html
+     
+#+begin_src emacs-lisp
+ (defun fix-rst-link-format (text backend info)
+       "Temporary fix for bug https://github.com/masayuko/ox-rst/issues/34"
+       (when (org-export-derived-backend-p backend 'rst)
+         (replace-regexp-in-string "\\(\\.\\)[ >]"  ".rst" text nil nil 1)))
+     
+     (add-to-list 'org-export-filter-link-functions
+                  'fix-rst-link-format)
+
+#+end_src
+
+#+RESULTS:
+| fix-rst-link-format |
+
 
 * Org-mode for github
 ** toc-org :ARCHIVE:
