@@ -1421,13 +1421,13 @@ https://gitlab.com/yuvallanger/worg/blob/ed18772a5015bee9159d55459bbfee4bda66941
 * COMMENT Org-mode Pandoc export
 #+begin_src emacs-lisp
 ; (require 'ox-md nil t)
-;(require 'ox-gfm nil t)
-(require 'ox-pandoc)
+(require 'ox-gfm nil t)
+;(require 'ox-pandoc)
 
 #+end_src
 
 #+RESULTS:
-: ox-rst
+: ox-gfm
 
 hook to fix image format after rst export
 #+begin_src emacs-lisp
@@ -1455,25 +1455,128 @@ hook to fix image format after rst export
 #+RESULTS:
 : ox-rst
 
-Temporary fix for .org link export 
+** Temporary fix for .org link export 
 https://github.com/masayuko/ox-rst/issues/34
 
 http://orgmode.org/manual/Advanced-configuration.html
      
 #+begin_src emacs-lisp
- (defun fix-rst-link-format (text backend info)
-       "Temporary fix for bug https://github.com/masayuko/ox-rst/issues/34"
-       (when (org-export-derived-backend-p backend 'rst)
-         (replace-regexp-in-string "\\(\\.\\)[ >]"  ".rst" text nil nil 1)))
-     
-     (add-to-list 'org-export-filter-link-functions
-                  'fix-rst-link-format)
+(defun fix-rst-link-format (text backend info)
+  "Temporary fix for bug https://github.com/masayuko/ox-rst/issues/34"
+  (when (org-export-derived-backend-p backend 'rst)
+    (replace-regexp-in-string "\\(\\.\\)[ >]"  ".rst" text nil nil 1)))
+
+(add-to-list 'org-export-filter-link-functions
+             'fix-rst-link-format)
 
 #+end_src
 
 #+RESULTS:
 | fix-rst-link-format |
+** Change default markup for =verbatim= to italic
 
+#+begin_src emacs-lisp
+(custom-set-variables
+ '(org-rst-text-markup-alist
+   (quote
+    ((bold . "**%s**")
+     (code . verb)
+     (italic . "*%s*")
+     (verbatim . "*%s*")))))
+#+end_src
+
+** Redefine how titles are export to .rst
+
+Set TODO kewords as BOLD and tags ans verbatim:
+
+#+begin_src emacs-lisp
+
+(defun org-rst--build-title
+  (element info &optional underline notags toc)
+  "Format ELEMENT title and return it.
+
+ELEMENT is either an `headline' or `inlinetask' element.  INFO is
+a plist used as a communication channel.
+
+When optional argument UNDERLINE is non-nil, underline title,
+without the tags, according to `org-rst-underline'
+specifications.
+
+If optional argument NOTAGS is non-nil, no tags will be added to
+the title.
+
+When optional argument TOC is non-nil, use optional title if
+possible.  It doesn't apply to `inlinetask' elements."
+  (let* ((headlinep (eq (org-element-type element) 'headline))
+		 (numbers
+		  ;; Numbering is specific to headlines.
+		  (and headlinep (org-export-numbered-headline-p element info)
+			   ;; All tests passed: build numbering string.
+			   (concat
+				(mapconcat
+				 'number-to-string
+				 (org-export-get-headline-number element info) ".")
+				" ")))
+		 (text
+		  (org-trim
+		   (org-export-data
+			(if (and toc headlinep) (org-export-get-alt-title element info)
+			  (org-element-property :title element))
+			info)))
+		 (todo
+		  (and (plist-get info :with-todo-keywords)
+			   (let ((todo (org-element-property :todo-keyword element)))
+				 (and todo (concat "**" (org-export-data todo info) "** ")))))
+		 (tags (and (not notags)
+					(plist-get info :with-tags)
+					(let ((tag-list (org-export-get-tags element info)))
+					  (and tag-list
+						   (format "``%s``"
+								   (mapconcat 'identity tag-list ":"))))))
+		 (priority
+		  (and (plist-get info :with-priority)
+			   (let ((char (org-element-property :priority element)))
+				 (and char (format "(#%c) " char)))))
+		 (first-part (concat numbers todo priority text)))
+    (concat
+     first-part
+     ;; Align tags, if any.
+     (when tags
+       (format
+		(format " %%%ds" (string-width tags))
+		tags))
+     ;; Maybe underline text, if ELEMENT type is `headline' and an
+     ;; underline character has been defined.
+     (when (and underline headlinep)
+       (let ((under-char
+			  (nth (1- (org-export-get-relative-level element info))
+				   '(?- ?~ ?^ ?: ?' ?\ ?_))))
+		 (and under-char
+			  (concat "\n"
+					  (make-string (string-width first-part) under-char))))))))
+#+end_src
+
+** COMMENT Tried to fix the todo keyword with filter but it doesnt work
+#+begin_src emacs-lisp
+(defun fmt-todo-keyword (text backend info)
+  "Keyword in bold"
+  (when (org-export-derived-backend-p backend 'rst)
+    (replace-regexp-in-string "\\(.*\\)" "**\\1**" text)))
+
+(add-to-list 'org-export-filter-keyword-functions
+             'fmt-todo-keyword)
+
+#+end_src
+
+#+RESULTS:
+| fmt-todo-keyword |
+
+#+begin_src emacs-lisp
+(replace-regexp-in-string "\\(.*\\)" "**\\1**" "TODO" )
+#+end_src
+
+#+RESULTS:
+: **TODO**
 
 * Org-mode for github
 ** toc-org :ARCHIVE:
