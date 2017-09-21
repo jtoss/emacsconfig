@@ -321,10 +321,12 @@ Set a shortcut for this function
 ** Recenter cursor positions in the windoe                           :JULIO:
 #+begin_src emacs-lisp
 (setq recenter-positions '(middle 0.06 bottom))
+(setq scroll-step 1)
+(setq scroll-conservatively 10000)
+(setq auto-window-vscroll nil)
 #+end_src
 
 #+RESULTS:
-| middle | 0.06 | bottom |
 
 ** Evilmode                                                          :JULIO:
 Emulates the Vim commands in emacs
@@ -1464,7 +1466,9 @@ http://orgmode.org/manual/Advanced-configuration.html
 (defun fix-rst-link-format (text backend info)
   "Temporary fix for bug https://github.com/masayuko/ox-rst/issues/34"
   (when (org-export-derived-backend-p backend 'rst)
-    (replace-regexp-in-string "\\(\\.\\)[ >]"  ".rst" text nil nil 1)))
+    (replace-regexp-in-string "\\(\\.\\)>"  ".rst" 
+                              (replace-regexp-in-string "\\(\\.\\) <"  ".rst" text nil nil 1) 
+			      nil nil 1)))
 
 (add-to-list 'org-export-filter-link-functions
              'fix-rst-link-format)
@@ -1473,6 +1477,8 @@ http://orgmode.org/manual/Advanced-configuration.html
 
 #+RESULTS:
 | fix-rst-link-format |
+
+
 ** Change default markup for =verbatim= to italic
 
 #+begin_src emacs-lisp
@@ -1532,7 +1538,7 @@ possible.  It doesn't apply to `inlinetask' elements."
 					(let ((tag-list (org-export-get-tags element info)))
 					  (and tag-list
 						   (format "``%s``"
-								   (mapconcat 'identity tag-list ":"))))))
+								   (mapconcat 'identity tag-list "``  ``"))))))
 		 (priority
 		  (and (plist-get info :with-priority)
 			   (let ((char (org-element-property :priority element)))
@@ -1555,6 +1561,9 @@ possible.  It doesn't apply to `inlinetask' elements."
 			  (concat "\n"
 					  (make-string (string-width first-part) under-char))))))))
 #+end_src
+
+#+RESULTS:
+: org-rst--build-title
 
 ** COMMENT Tried to fix the todo keyword with filter but it doesnt work
 #+begin_src emacs-lisp
