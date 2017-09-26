@@ -572,8 +572,11 @@ don't want is there, but I haven't had any such problems yet.
 (add-hook 'LaTeX-mode-hook 'turn-on-outline-minor-mode)
 (add-hook 'latex-mode-hook 'turn-on-outline-minor-mode)
 (setq outline-minor-mode-prefix "\C-c \C-o") ; Or something else
+(setq LaTex-command "pdflatex") ; C-c C-c to run pdflatex
 #+end_src
 
+#+RESULTS:
+: pdflatex
 
 * Org-mode convenient configuration
 ** Default directory
