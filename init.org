@@ -574,13 +574,22 @@ don't want is there, but I haven't had any such problems yet.
 ;(add-hook 'LaTeX-mode-hook 'turn-on-outline-minor-mode)
 ;(add-hook 'latex-mode-hook 'turn-on-outline-minor-mode)
 
-(add-hook 'LaTeX-mode-hook outline-minor-mode) ; latex
+;(add-hook 'LaTeX-mode-hook outline-minor-mode) ; latex
 (setq LaTex-command "pdflatex") ; C-c C-c to run pdflatex
 #+end_src
 
 #+RESULTS:
 : pdflatex
 
+** Extra functionalities to latex-mode
+
+Has org-mode like navigation between headers
+
+#+begin_src emacs-lisp
+(add-hook 'LaTeX-mode-hook #'latex-extra-mode)
+#+end_src
+
+** COMMENT Define keymaps
 https://www.emacswiki.org/emacs/OutlineMinorMode
 
 #+begin_src emacs-lisp
