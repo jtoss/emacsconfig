@@ -33,6 +33,16 @@ other exaple of configurations: https://carlhu.com/orgmode
 
 I took the original version of this file at http://mescal.imag.fr/membres/arnaud.legrand/misc/init.php
 
+* Before anything else
+#+begin_src emacs-lisp
+(global-unset-key "\C-c \C-o")
+
+;(setq outline-minor-mode-prefix "\C-o")
+;(setq outline-minor-mode-prefix "\M-#")
+(setq outline-minor-mode-prefix "\C-c \C-o") ; Or something else
+#+end_src
+
+
 * Installation Instructions
 Then copy it into =~/.emacs.d/init.org=. 
 
@@ -565,8 +575,9 @@ don't want is there, but I haven't had any such problems yet.
 
 * Auctex
 
+https://emacs.stackexchange.com/a/3103
 #+begin_src emacs-lisp
-; set the prefx here doesn't work for some unkown reason ...
+; set the prefx here doesn't work for some unkown reason ... must be set before anything else.
 ; (setq outline-minor-mode-prefix "\C-c \C-o") ; Or something else
 
 ;(defun turn-on-outline-minor-mode ()
@@ -1154,7 +1165,21 @@ C
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images) 
 (add-hook 'org-mode-hook 'org-display-inline-images)
 (add-hook 'org-mode-hook 'org-babel-result-hide-all)
+
+; Causes my emacs to close randomly ... BUG ? 
+; (setq org-image-actual-width nil)
 #+END_SRC
+
+#+RESULTS:
+| org-ref-org-menu | org-babel-result-hide-all | org-display-inline-images | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-block-all append local] 5 |
+
+#+begin_src emacs-lisp
+;(setq org-babel-after-execute-hook nil)
+#+end_src
+
+#+RESULTS:
+
+
 ** TODO Ipython configuration                                         :JULIO:
 *** Use python3
 :PROPERTIES:
